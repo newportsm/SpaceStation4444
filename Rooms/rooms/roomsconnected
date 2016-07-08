@@ -1,0 +1,3 @@
+Kitchen,Bridge,BathroomShowers*
+Bridge,Kitchen,BathroomShowers*
+BathroomShowers,Bridge,Kitchen*

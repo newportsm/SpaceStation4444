@@ -6,24 +6,21 @@
 #include <vector>
 #include <unordered_map>
 
+using std::vector;
+using std::unordered_map;
+using std::string;
+
 class Item{
 	private:
 		string itemName;
 		string itemDescription;
-		vector<string> usageVerbs;
-		std::unordered_map<string, vector<string> > usageResults;
 	public:
-		Item(string name, string desc, vector<string> verbs, std::unordered_map<string, vector<string> > results){
+		Item(string name, string desc){
 			itemName = name;
 			itemDescription = desc;
-			usageVerbs = verbs;
-			usageResults = results;
 		}
 		string getItemName(){ return itemName; }
-		string getitemDescription(){ return itemDescription; }
-		vector<string> getUsageVerbs(){ return usageVerbs; }
-		vector<string> processUsage(string & verb);
-
+		string getItemDescription(){ return itemDescription; }
 };
 
 #endif

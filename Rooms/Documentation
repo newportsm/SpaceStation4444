@@ -1,0 +1,65 @@
+To compile the basic main function and see if it works:
+
+make testGame
+./testGame
+
+To clean up everything EXCEPT the executable:
+make cleandepend
+
+To clean up everything INCLUDING the executable:
+make cleanall
+
+*******
+
+The Game class
+
+This is the main object that holds the player object and a vector of pointers to room objects.
+
+The Game object is relatively self-contained -- you need only include Game.hpp and create a Game object to load the rooms, player, events, and items.
+
+Currently, the game class has only 1 function for testing purpose -- that would be printRooms() -- but I believe we'd be best severd to add functions directly to the Game class for processing commands, etc.
+
+*******
+
+The Player class
+
+This is a relatively bare class -- it's main purpose to hold items that the player has picked up.
+
+This class has three methods:
+getCurrentItems() returns the items held by the user in the form of a const vector of pointers to Item.
+addItem(Item * newItem) adds a new pointer to an Item to the items vector
+removeItem(Item * oldItem) removes a pointer to an Item from the items vector (maybe it would be better use the name of the item? let me know if that would be better than passing a pointer)
+
+*******
+
+The Room class
+
+This is the big one! At the start of the game, all events and items are held in a Room object. I'll provide more details about the class's objects later, but probably the important ones are these:
+
+getCurrentRooms() returns a const pointer to a vector of pointers to Room -- this is the vector that holds pointers to all the connected rooms. By iterating over this vector, we can get the names of all connected rooms.
+
+For example, this would iterate over all the rooms in the game object and then print all the rooms connected to each room.
+
+	vector<Room *>::const_iterator connIt;
+	std::vector<Room *>::const_iterator it;
+	for(it = rooms.begin(); it != rooms.end(); ++it){
+		cout << (*it)->getRoomName() << ": ";
+		connIt = (*it)->getCurrentRooms()->begin();
+		for(; connIt != (*it)->getCurrentRooms()->end(); ++connIt){
+			cout << (*connIt)->getRoomName() << "   ";
+		}
+		cout << endl;
+	}
+
+
+getCurrentEvents() and getCurrentItems() work in basically the same way.
+
+There are also the methods addRoom(Room * newRoom), addItem(Item * newItem), and addEvent(Event * newEvent). The addRoom method will be useful for opening up new paths (for example turning off anti-gravity so the player can use the connection tube in the game). The addItem method will be useful for when a player puts down an item (perhaps it won't be used though). I don't forsee addEvent being used, but it's there just in case!
+
+The changeVisited() and getVisited thosed are useful for finding out if a room has been visited. getVisited returns a bool and changeVisited flips a bool -- basically, if it's false, we'll want to flip it after visiting a room for the first time.
+
+getRoomName returns a string with the room name while getLongDescription returns a string with the long description and getShortDescription returns a string with the short description. (No surprises here!)
+
+*******
+
+The Event class and the Item class coming soon!

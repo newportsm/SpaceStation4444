@@ -29,7 +29,9 @@ class Room{
 			shortDescription = shortDesc;
 			visited = false;
 		}
-		
+	
+		const vector<Item *> * getCurrentItems(){ return &items; }
+	
 		void addRoom(Room * newRoom) { connectedRooms.push_back(newRoom); }
 		void addItem(Item * newItem) { items.push_back(newItem); }
 		void addEvent(Event * newEvent) { events.push_back(newEvent); }
@@ -45,9 +47,10 @@ class Room{
 		void removeRoom(Room * room);
 		void removeEvent(Event * event);
 		
-		const vector<Item *> getCurrentItems(){ return items; }
-		const vector<Room *> getCurrentRooms(){ return connectedRooms; }
-		const vector<Event *> getCurrentEvents(){ return events; }
+		const vector<Room *> * getCurrentRooms(){ return & connectedRooms; }
+		const vector<Event *> * getCurrentEvents(){ return & events; }
+
+		//const vector<Room *> * getCurrentRoomsPtr(){ return &connectedRooms; }
 
 		Event * getFirstActiveEvent();
 

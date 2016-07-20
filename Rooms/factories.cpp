@@ -7,12 +7,14 @@ Room * getVectorPosition(string room, vector<Room *> * rooms){
 	for(it = rooms->begin(); it != rooms->end(); ++it){
 		if((*it)->getRoomName() == room) return (*it);
 	}
+
+	return NULL;
 }
 
 int stringToVector(string input, vector<string> *resultVector){
-	int oldPos = 0;
+	unsigned int oldPos = 0;
 	string newString;
-	for(int pos = 0; pos < input.length(); pos++){
+	for(unsigned int pos = 0; pos < input.length(); pos++){
 		if(input[pos] == ';' || input[pos] == '*'){
 			newString = input.substr(oldPos, pos - oldPos);
 			oldPos = pos + 1;
@@ -23,11 +25,11 @@ int stringToVector(string input, vector<string> *resultVector){
 }
 
 int stringToMap(string input, std::unordered_map<string, vector<string>> *resultMap){
-	int oldPos = 0;
+	unsigned int oldPos = 0;
 	string key;
 	string newString;
 	vector<string> value;
-	for(int pos = 0; pos < input.length(); pos++){
+	for(unsigned int pos = 0; pos < input.length(); pos++){
 		if(input[pos] == ':'){
 			key = input.substr(oldPos, pos - oldPos);
 			oldPos = pos + 1;
@@ -40,6 +42,8 @@ int stringToMap(string input, std::unordered_map<string, vector<string>> *result
 	}
 	std::pair<string, vector<string> > newPair(key, value);
 	resultMap->insert(newPair);
+
+	return 1;
 }
 
 int roomFactory(vector<Room *> * rooms){
@@ -159,6 +163,8 @@ int eventFactory(vector<Room *> * rooms){
 		string fileName = "events/event" + std::to_string(count);
 		eventFile.open(fileName, std::fstream::in);
 	}
+
+	return 1;
 }
 
 int loadGame(vector<Room *> * rooms){

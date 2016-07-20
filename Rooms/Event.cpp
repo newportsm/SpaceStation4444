@@ -7,5 +7,7 @@ vector<string> Event::processEvent(string & option){
 			return it->second;
 		}
 	}
+	vector<string> empty{"NoOptions"};
+	return empty;
 }
 

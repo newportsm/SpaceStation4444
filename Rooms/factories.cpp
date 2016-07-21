@@ -7,7 +7,7 @@ Room * getVectorPosition(string room, vector<Room *> * rooms){
 	//the pointer
 	vector<Room *>::iterator it;
 	for(it = rooms->begin(); it != rooms->end(); ++it){
-		std::cout << (*it)->getRoomName() << std::endl;
+		std::cout << (*it)->getRoomName() << "** " << std::endl;
 		if((*it)->getRoomName() == room) return (*it);
 	}
 	//If you find nothing, return null

@@ -1,5 +1,12 @@
 #include "factories.hpp"
 
+void printNums(string input){
+	for(int i = 0; i < input.length(); i++){
+		std::cout << (int)input[i] << " ";
+	}
+	std::cout << std::endl;
+}
+
 //Get pointer to Room for room with same name as the string room
 Room * getVectorPosition(string room, vector<Room *> * rooms){
 	//Iterate over vector of pointers to room until you find match
@@ -7,7 +14,7 @@ Room * getVectorPosition(string room, vector<Room *> * rooms){
 	//the pointer
 	vector<Room *>::iterator it;
 	for(it = rooms->begin(); it != rooms->end(); ++it){
-		std::cout << (*it)->getRoomName() << "** " << std::endl;
+		printNums((*it)->getRoomName());
 		if((*it)->getRoomName() == room) return (*it);
 	}
 	//If you find nothing, return null

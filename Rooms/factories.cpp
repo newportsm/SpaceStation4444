@@ -69,7 +69,7 @@ int roomFactory(vector<Room *> * rooms){
 	string input;
 	while(getline(roomFile, input)){
 		std::cout << "loading connected rooms" << std::endl;
-		std::cout << "Input from connected room file: " << input << std::endl;
+		std::cout << "Input from connected room file: " << input << "++" << std::endl;
 		string curRoom;
 		int pos = 0;
 		int oldPos = 0;

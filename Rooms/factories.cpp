@@ -2,8 +2,8 @@
 
 string cleanRoomName(string input){
 	std::cout << (int)input[input.length() - 1] << std::endl;
-	if(input[input.length() - 1] == '\r');
-		return input.substr(0, input.length() - 2);
+	if((int)input[input.length() - 1] == 13)
+		return input.substr(0, input.length() - 1);
 	return input;
 }
 
@@ -15,7 +15,8 @@ Room * getVectorPosition(string room, vector<Room *> * rooms){
 	vector<Room *>::iterator it;
 	for(it = rooms->begin(); it != rooms->end(); ++it){
 		string roomName = cleanRoomName((*it)->getRoomName());
-		if((*it)->getRoomName() == room) return (*it);
+		std::cout << roomName << std::endl;
+		if(roomName == room) return (*it);
 	}
 	//If you find nothing, return null
 	std::cout << "Could not find room with name " << room << std::endl;

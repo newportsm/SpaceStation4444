@@ -1,7 +1,7 @@
 #include "factories.hpp"
 
 void printNums(string input){
-	for(int i = 0; i < input.length(); i++){
+	for(unsigned int i = 0; i < input.length(); i++){
 		std::cout << (int)input[i] << " ";
 	}
 	std::cout << std::endl;

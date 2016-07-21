@@ -1,9 +1,13 @@
 #include "factories.hpp"
 
-string cleanRoomName(string input){
-	std::cout << (int)input[input.length() - 1] << std::endl;
+//In case we're reading text files on Windows, we need to get rid
+//of that '\r' on the end of strings.
+string cleanStrings(string input){
+	//Check if we have a carriage return and send back
+	//the string w/o carriage return
 	if((int)input[input.length() - 1] == 13)
 		return input.substr(0, input.length() - 1);
+	//If no carriage return, just send it back!
 	return input;
 }
 
@@ -14,8 +18,8 @@ Room * getVectorPosition(string room, vector<Room *> * rooms){
 	//the pointer
 	vector<Room *>::iterator it;
 	for(it = rooms->begin(); it != rooms->end(); ++it){
-		string roomName = cleanRoomName((*it)->getRoomName());
-		std::cout << roomName << std::endl;
+		//Make sure we don't have carriage return at end of string
+		string roomName = cleanStrings((*it)->getRoomName());
 		if(roomName == room) return (*it);
 	}
 	//If you find nothing, return null
@@ -39,7 +43,6 @@ int stringToVector(string input, vector<string> *resultVector){
 	for(unsigned int pos = 0; pos < input.length(); pos++){
 		if(input[pos] == ';' || input[pos] == '*'){
 			newString = input.substr(oldPos, pos - oldPos);
-			std::cout << newString << std::endl;
 			oldPos = pos + 1;
 			resultVector->push_back(newString);
 		}
@@ -60,11 +63,11 @@ int roomFactory(vector<Room *> * rooms){
 	roomFile.open(fileName, std::fstream::in);
 	while(roomFile.is_open()){
 		std::getline(roomFile, name);
-		std::cout << name << std::endl;
+		name = cleanStrings(name);
 		std::getline(roomFile, longDesc);
-		std::cout << longDesc << std::endl;
+		longDesc = cleanStrings(longDesc);
 		std::getline(roomFile, shortDesc);
-		std::cout << shortDesc << std::endl;
+		shortDesc = cleanStrings(shortDesc);
 		Room * newRoom = new Room(name, longDesc, shortDesc);
 		rooms->push_back(newRoom);
 		roomFile.close();
@@ -76,8 +79,8 @@ int roomFactory(vector<Room *> * rooms){
 	roomFile.open(fileName, std::fstream::in);
 	string input;
 	while(getline(roomFile, input)){
-		std::cout << "loading connected rooms" << std::endl;
-		std::cout << "Input from connected room file: " << input << "++" << std::endl;
+		input = cleanStrings(input);
+		std::cout << "Loading connected rooms" << std::endl;
 		string curRoom;
 		int pos = 0;
 		int oldPos = 0;
@@ -94,7 +97,6 @@ int roomFactory(vector<Room *> * rooms){
 			pos++;
 			if(input[pos] == ',' || input[pos] == '*'){
 				curRoom = input.substr(oldPos, pos - oldPos);
-				std::cout << curRoom << std::endl;
 				oldPos = pos + 1;
 				roomToAdd = getVectorPosition(curRoom, rooms);
 				if(roomToAdd == NULL){
@@ -110,7 +112,7 @@ int roomFactory(vector<Room *> * rooms){
 
 
 int itemFactory(vector<Room *> * rooms){
-	std::cout << "loading items" << std::endl;
+	std::cout << "Loading items" << std::endl;
 	if(rooms == NULL) return 0;
 	string name;
 	string description;
@@ -121,15 +123,16 @@ int itemFactory(vector<Room *> * rooms){
 	itemFile.open(fileName, std::fstream::in);
 	while(itemFile.is_open()){
 		std::getline(itemFile, name);
-		std::cout << name << std::endl;
+		name = cleanStrings(name);
 		std::getline(itemFile, description);
-		std::cout << description << std::endl;
+		description = cleanStrings(description);
 		std::getline(itemFile, roomName);
-		std::cout << roomName << std::endl;
+		roomName = cleanStrings(roomName);
 		Item * newItem = new Item(name, description);
 		vector<Room *>::iterator it;
 		for(it = rooms->begin(); it != rooms->end(); ++it){
-			if((*it)->getRoomName() == roomName)
+			string roomName = cleanStrings((*it)->getRoomName());
+			if(roomName == roomName)
 				(*it)->addItem(newItem);
 		}
 		itemFile.close();
@@ -157,28 +160,29 @@ int eventFactory(vector<Room *> * rooms){
 	eventFile.open(fileName, std::fstream::in);
 	while(eventFile.is_open()){
 		std::getline(eventFile, name);
-		std::cout << name << std::endl;
+		name = cleanStrings(name);
 		std::getline(eventFile, description);
-		std::cout << description << std::endl;
+		description = cleanStrings(description);
 		std::getline(eventFile, room);
-		std::cout << room << std::endl;
+		room = cleanStrings(room);
 		std::getline(eventFile, input);
-		std::cout << input << std::endl;
+		input = cleanStrings(input);
 		if(!stringToVector(input, &options))
 			cout << "Error converting " << input << " to vector." << endl;
 		while(std::getline(eventFile, input)){
+			input = cleanStrings(input);
 			int pos = 0;
 			while(input[pos] != ':') pos++;
 			tempAction = input.substr(0, pos);
-			std::cout << tempAction << std::endl;
 			if(!stringToVector(input.substr(pos + 1), &tempResults))
-				cout << "Error convert " << input.substr(pos + 1) << " to vector." << endl;
+				cout << "Error converting " << input.substr(pos + 1) << " to vector." << endl;
 			results.insert(std::make_pair(tempAction, tempResults));
 		}
 		Event * newEvent = new Event(name, description, options, results);
 		vector<Room *>::iterator it;
 		for(it = rooms->begin(); it != rooms->end(); ++it){
-			if((*it)->getRoomName() == room){
+			string roomName = cleanStrings((*it)->getRoomName());
+			if(roomName == room){
 				(*it)->addEvent(newEvent);
 			}
 		}

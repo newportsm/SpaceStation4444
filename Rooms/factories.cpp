@@ -1,6 +1,7 @@
 #include "factories.hpp"
 
 string cleanRoomName(string input){
+	std::cout << (int)input[input.length() - 1] << std::endl;
 	if(input[input.length() - 1] == '\r');
 		return input.substr(0, input.length() - 2);
 	return input;

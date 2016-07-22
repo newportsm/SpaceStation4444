@@ -17,7 +17,20 @@ This is the main object that holds the player object and a vector of pointers to
 
 The Game object is relatively self-contained -- you need only include Game.hpp and create a Game object to load the rooms, player, events, and items.
 
-Currently, the game class has only 1 function for testing purpose -- that would be printRooms() -- but I believe we'd be best severd to add functions directly to the Game class for processing commands, etc.
+I think the easiest way to run things would be to have a game loop that tests if the player has died and then exits when that is true. I have started adding various game functions to the Game class in order to make sure the data classes are working.
+
+Currently we have:
+bool getPlayerStatus() - returns true if player is alive, false if dead
+void playerHasDied() - This will set player to dead (playerIsAlive = false)
+void printRooms() - for testing purpose, prints rooms and everything they hold
+void inputToVector(string input) - This will split user input into a vector so it's easier to work with and saves it in currentCommand (private variable which is part of Game class). Called by getPlayerInput
+void printCurrentRoom() - Prints all the info for current room
+void getPlayerInput() - Super barebones, gets player input and then calls inputToVector with that input.
+void processPlayerInput() - This uses currentCommand (so nothing is passed in) and several if statements to determine what command is being issued.
+void look() -- prints the items in the room and the connected rooms
+void go(string location) -- changes currentRoom to location (if location is accessible) or prints error message
+void grab(string item) -- removes item from the room's list of items and adds it to the player's list of items (if indicated item exists) or prints error message
+void checkItemsInHand() -- prints the names of the items the player is holding. Maybe should also include descriptions?
 
 *******
 
@@ -26,9 +39,9 @@ The Player class
 This is a relatively bare class -- it's main purpose to hold items that the player has picked up.
 
 This class has three methods:
-getCurrentItems() returns the items held by the user in the form of a const vector of pointers to Item.
-addItem(Item * newItem) adds a new pointer to an Item to the items vector
-removeItem(Item * oldItem) removes a pointer to an Item from the items vector (maybe it would be better use the name of the item? let me know if that would be better than passing a pointer)
+getCurrentItems() - returns the items held by the user in the form of a const vector of pointers to Item.
+addItem(Item * newItem) - adds a new pointer to an Item to the items vector
+removeItem(Item * oldItem) - removes a pointer to an Item from the items vector (maybe it would be better use the name of the item? let me know if that would be better than passing a pointer)
 
 *******
 
@@ -56,7 +69,7 @@ getCurrentEvents() and getCurrentItems() work in basically the same way.
 
 There are also the methods addRoom(Room * newRoom), addItem(Item * newItem), and addEvent(Event * newEvent). The addRoom method will be useful for opening up new paths (for example turning off anti-gravity so the player can use the connection tube in the game). The addItem method will be useful for when a player puts down an item (perhaps it won't be used though). I don't forsee addEvent being used, but it's there just in case!
 
-The changeVisited() and getVisited thosed are useful for finding out if a room has been visited. getVisited returns a bool and changeVisited flips a bool -- basically, if it's false, we'll want to flip it after visiting a room for the first time.
+The changeVisited() and getVisited() functions are useful for finding out if a room has been visited. getVisited returns a bool and changeVisited flips a bool -- basically, if it's false, we'll want to flip it after visiting a room for the first time.
 
 getRoomName returns a string with the room name while getLongDescription returns a string with the long description and getShortDescription returns a string with the short description. (No surprises here!)
 
@@ -64,7 +77,22 @@ getRoomName returns a string with the room name while getLongDescription returns
 
 The Event class 
 
-This class holds all the events that will be used in the various rooms.
+This class represent all the events that will be used in the various rooms.
 
+The Event class has an active bool (which can be access via getStatus(), which will return true or false and can be flipped using changeStatus()).
 
-and the Item class coming soon!
+string getEventName() - returns event name
+string getEventDescription() - returns event description
+bool getStatus() - return true if event is active and false if event is not active
+void changeStatus() - flips true/false for event status
+const vector<string> * getEvenOptions() - returns pointer to const vector of strings, iterate over this to display options for player to respond to event
+vector<string> processEvent(string option) - take option and determines result and returns result description and strings indicating result (such as player died). need to set up interface in game to hand result strings.
+
+*******
+
+The Item class
+
+Very simple class!
+Has itemName and itemDescription
+string getItemName() - returns itemName!
+string getItemDescription() - returns itemDescription!

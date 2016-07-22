@@ -17,9 +17,7 @@ This is the main object that holds the player object and a vector of pointers to
 
 The Game object is relatively self-contained -- you need only include Game.hpp and create a Game object to load the rooms, player, events, and items.
 
-I think the easiest way to run things would be to have a game loop that tests if the player has died and then exits when that is true. I have started adding various game functions to the Game class in order to make sure the data classes are working.
-
-Currently we have:
+Current functions in Game class:
 bool getPlayerStatus() - returns true if player is alive, false if dead
 void playerHasDied() - This will set player to dead (playerIsAlive = false)
 void printRooms() - for testing purpose, prints rooms and everything they hold
@@ -94,5 +92,14 @@ The Item class
 
 Very simple class!
 Has itemName and itemDescription
-string getItemName() - returns itemName!
-string getItemDescription() - returns itemDescription!
+string getItemName() - returns itemName as a string
+string getItemDescription() - returns itemDescription as a string
+
+*******
+
+Things to work on:
+1) Need to add more events
+2) Need to add a check for events -- some options should not work if specific items are not held by the player (for example, you shouldn't be able to flash an alien with a flashlight if you don't have a flashlight!)
+3) Need to solidify passing text to game engine for display with ncurses-enabled GUI (and taking input)
+
+

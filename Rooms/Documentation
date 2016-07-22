@@ -62,4 +62,9 @@ getRoomName returns a string with the room name while getLongDescription returns
 
 *******
 
-The Event class and the Item class coming soon!
+The Event class 
+
+This class holds all the events that will be used in the various rooms.
+
+
+and the Item class coming soon!

@@ -31,8 +31,9 @@ class Event{
 		void changeStatus() { active = !active; }
 		string getEventName() { return eventName; }
 		string getEventDescription() { return eventDescription; }
-		vector<string> getEventOptions() { return eventOptions; }
-		vector<string> processEvent(string & option);
+		const vector<string> * getEventOptions() { return & eventOptions; }
+		
+		vector<string> processEvent(string option);
 
 };
 

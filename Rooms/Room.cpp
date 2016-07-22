@@ -7,6 +7,7 @@ void Room::removeItem(Item * item) {
 	it = items.begin();
 	for(;it < items.end(); ++it){
 		if(*it == item){
+			free (*it);
 			items.erase(it);
 			break;
 		}
@@ -38,6 +39,7 @@ void Room::removeEvent(Event * event) {
 Event * Room::getFirstActiveEvent(){
 	vector<Event *>::iterator it;
 	for(it = events.begin(); it < events.end(); ++it){
+		std::cout << (*it)->getEventName() << std::endl;
 		if((*it)->getStatus()){
 			return *it;
 		}

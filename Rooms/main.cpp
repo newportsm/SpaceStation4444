@@ -3,7 +3,13 @@
 int main(){
 
 	Game game;
-	game.printRooms();
+	//game.printRooms();
+
+	while(game.getPlayerStatus()){
+		game.printCurrentRoom();
+		game.getPlayerInput();
+		game.processPlayerInput();
+	}
 
 	return 0;
 }

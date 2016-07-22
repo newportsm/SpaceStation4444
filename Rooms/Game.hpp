@@ -3,27 +3,39 @@
 
 #include "factories.hpp"
 #include "Player.hpp"
+#include <string>
+#include <vector>
+#include <sstream>
+#include <algorithm>
+
+using std::vector;
+using std::string;
+using std::cin;
 
 class Game{
 	private:
 		Player player;
 		vector<Room *> rooms;
+		Room * currentRoom;
+		bool playerIsAlive;
+		vector<string> currentCommand;
 	public:
 		Game(){
 			loadGame(&rooms);
+			currentRoom = rooms[0];
+			playerIsAlive = true;
 		}
-		void printRooms(){
-			vector<Room *>::const_iterator connIt;
-			std::vector<Room *>::const_iterator it;
-			for(it = rooms.begin(); it != rooms.end(); ++it){
-				cout << (*it)->getRoomName() << ": ";
-				connIt = (*it)->getCurrentRooms()->begin();
-				for(; connIt != (*it)->getCurrentRooms()->end(); ++connIt){
-					cout << (*connIt)->getRoomName() << "   ";
-				}
-				cout << endl;
-			}
-		}
+		bool getPlayerStatus(){ return playerIsAlive; }
+		void playerHasDied(){ playerIsAlive = false; }
+		void inputToVector(string input);
+		void printRooms();
+		void printCurrentRoom();
+		void getPlayerInput();
+		void processPlayerInput();
+		void look();
+		void go(string location);
+		void grab(string item);
+		void checkItemsInHand();
 
 };
 

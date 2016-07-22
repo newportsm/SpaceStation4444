@@ -131,8 +131,8 @@ int itemFactory(vector<Room *> * rooms){
 		Item * newItem = new Item(name, description);
 		vector<Room *>::iterator it;
 		for(it = rooms->begin(); it != rooms->end(); ++it){
-			string roomName = cleanStrings((*it)->getRoomName());
-			if(roomName == roomName)
+			string curRoomName = cleanStrings((*it)->getRoomName());
+			if(curRoomName == roomName)
 				(*it)->addItem(newItem);
 		}
 		itemFile.close();
@@ -180,6 +180,7 @@ int eventFactory(vector<Room *> * rooms){
 		}
 		Event * newEvent = new Event(name, description, options, results);
 		vector<Room *>::iterator it;
+		cout << "Add events to rooms" << endl;
 		for(it = rooms->begin(); it != rooms->end(); ++it){
 			string roomName = cleanStrings((*it)->getRoomName());
 			if(roomName == room){
@@ -200,6 +201,7 @@ int loadGame(vector<Room *> * rooms){
 	if((results = roomFactory(rooms)) == 0) return results;
 	if((results = itemFactory(rooms)) == 0) return results;
 	if((results = eventFactory(rooms)) == 0) return results;
+	cout << endl;
 	return 1;
 }
 

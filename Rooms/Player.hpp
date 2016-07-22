@@ -12,7 +12,7 @@ class Player{
 		vector<Item *> items;
 	public:
 		//Player(){}
-		const vector<Item *> getCurrentItems(){ return items; }
+		const vector<Item *> * getCurrentItems(){ return & items; }
 		void addItem( Item * newItem ){ items.push_back(newItem); }
 		void removeItem( Item * oldItem);
 };

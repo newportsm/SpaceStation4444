@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 
+//Loops through pointer to Item vector and erases that item if found
 void Room::removeItem(Item * item) {
 	vector<Item *>::iterator it;
 	it = items.begin();
@@ -14,6 +15,7 @@ void Room::removeItem(Item * item) {
 	}
 }
 
+//Loops through pointer to Room vector and erases that item if found
 void Room::removeRoom(Room * room) {
 	vector<Room *>::iterator it;
 	it = connectedRooms.begin();
@@ -25,6 +27,7 @@ void Room::removeRoom(Room * room) {
 	}
 }
 
+//Loops through pointer to Event vector and erases that event if found
 void Room::removeEvent(Event * event) {
 	vector<Event *>::iterator it;
 	it = events.begin();
@@ -36,10 +39,11 @@ void Room::removeEvent(Event * event) {
 	}
 }
 
+//Looks through vector of events and returns pointer to event for
+//first event found with active = true
 Event * Room::getFirstActiveEvent(){
 	vector<Event *>::iterator it;
 	for(it = events.begin(); it < events.end(); ++it){
-		std::cout << (*it)->getEventName() << std::endl;
 		if((*it)->getStatus()){
 			return *it;
 		}

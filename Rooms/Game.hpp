@@ -36,6 +36,7 @@ class Game{
 		void go(string location);
 		void grab(string item);
 		void checkItemsInHand();
+		void respondToEvent(Event * currentEvent, const vector<string> * currentOptions);
 
 };
 

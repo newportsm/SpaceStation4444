@@ -1,6 +1,7 @@
 Alien attack!
 Oh, noes! An face-eating, dirty alien is attacking you! What are you going to do?
 Kitchen
-hit with;run away;flash*
-hit with:Oh no! You've made the alien angry! It's leapt on your face and is now eating it off. Better luck next time.;player died*
-flash with flashlight:Smart move! That scared the alien away! But you'll probably want to be careful next time you come in this room...*
+flash with flashlight;hit it;run away*
+hit it:Oh no! You've made the alien angry! It's leapt on your face and is now eating it off. Better luck next time.;playerdied*
+flash with flashlight:Smart move! That scared the alien away! But you'll probably want to be careful next time you come in this room...;continue*
+run away:Oh no! You startled the alien! It's leapt on your back and just bit through your spine! Oh, there's blood everywhere! Better luck next time.;playerdied*

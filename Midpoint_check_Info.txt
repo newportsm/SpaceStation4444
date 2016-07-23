@@ -18,4 +18,7 @@ How to start the game:
 	Rooms/rooms as you must enter the name of the room you want to move to and this file will tell you what files are connected.
 
 How to play the game:
-	Move around the space station from room to room 
+	Move around the space station from room to room and type "look" to look around a room. 
+
+How to clean up after the game:
+	Enter "make cleanall" to clean up all the files and "make cleandepend" for all but the executable to be cleaned.

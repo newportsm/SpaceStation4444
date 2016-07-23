@@ -1,9 +1,12 @@
 Mid-point check Info:
 
 What we have is a basic command-line interface that has:
-	** the ability to move from room to room and look around (however you must type "go to <name of room>")
-	** the ability to pick up items
-	** the ability to respond to events
+	** the ability to move from room to room and look around (using the command "go to <name of room>")
+	** the ability to pick up items (using the command "grab [item name]")
+	** the ability to inspect a room (using the command "look")
+	** the ability to respond to events (using options displayed on-screen)
+	** the ability to quit the game (using "quit")
+
 We also have:
 	** ASCII graphic examples
 	** ncurses practice GUIs 
@@ -13,12 +16,45 @@ We need to:
 	** implement the help menu
 	** integrate the game and the GUI
 
-How to start the game:
-	In the Rooms folder, enter "make testGame", then run the testGame.exe file. You may want to look at roomsconnected file in
-	Rooms/rooms as you must enter the name of the room you want to move to and this file will tell you what files are connected.
-
+How to compile and start the game:
+	In the Rooms folder, enter "make testGame", then run the testGame file (you will probably need to use "./testGame"). 
+	
 How to play the game:
-	Move around the space station from room to room and type "look" to look around a room. 
+	Move around the space station from room to room and type "look" to look around a room.
+	The "look" command will display all the items in the room that can be picked up and all the connected rooms that you can go to.
+	(You must type "look" exactly -- any changes to case, for example, will result in the game not recognizing it.)
 
-How to clean up after the game:
+	You can move to another room by entering the comman "go to [room name]". 
+	You'll need to type the room name and command exactly (for example, case is very important, so "Go to" won't work).
+	To find what rooms are connected to your current room, use "look" first.
+
+	To pick up an item, just enter "grab [item name]".
+	Again, you'll need to use the exact name.
+	Also, use look to see if items are available to be picked up.
+
+How to clean up when done with the game:
 	Enter "make cleanall" to clean up all the files and "make cleandepend" for all but the executable to be cleaned.
+
+What to look for when playing the game:
+	Please be aware that, at this point, the game does not have an ending!
+	When we are done, the game will end when the player has gotten to the escape pods after powering on the generator.
+	Several events are still missing, so the most you'll be able to do is go around the space station and interact with three events.
+	-- There are two alien attack events. The first one you can escape using "flash with flashlight" and the second you can escape using "hit it".
+	-- In the connection tube, you can get access to the next rooms using "turn off gravity".
+	
+	Please try some of the other options displayed by events when playing the game as well!
+	-- They will either result in player death or nothing happening. It's kind of fun...
+
+	You may want to look at the roomsconnected file in Rooms/rooms as it will help you get an idea of how the space station is laid out.
+	Please be careful not to edit the file, though, as it will probably totally break the game!
+
+Compiling nCurses files:
+	Navigate to the practice folder in the nCurses directory and enter: g++ -o [executable name] [file name of cpp file] -lncurses
+	For example: g++ -o colors colors.cpp -lncurses
+	You can then execute the small programs with the chosen executeable name (for example, "./colors").
+
+What to look for with nCurses files:
+	These are mostly for practice as we've never used nCurses before. 
+	We will taking what we've learned here and applying it to the game.
+	We believe that, thanks to this practice, we'll be able to more quickly implement the necessary nCurses functions for the game.
+

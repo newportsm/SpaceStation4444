@@ -39,8 +39,8 @@
 #define TEXT TEXT_ncurses
 #endif
 
-#include <ncursesw/ncurses.h>
-#include <ncursesw/eti.h>
+#include <ncurses/curses.h>
+#include <ncurses/eti.h>
 
 #ifdef __cplusplus
 extern "C" {

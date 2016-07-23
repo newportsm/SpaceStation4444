@@ -12,3 +12,10 @@ We need to:
 	** handle input in a more sophisticated manner
 	** implement the help menu
 	** integrate the game and the GUI
+
+How to start the game:
+	In the Rooms folder, enter "make testGame", then run the testGame.exe file. You may want to look at roomsconnected file in
+	Rooms/rooms as you must enter the name of the room you want to move to and this file will tell you what files are connected.
+
+How to play the game:
+	Move around the space station from room to room 

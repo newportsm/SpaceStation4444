@@ -28,7 +28,9 @@ int main(){
         cout << game.processPlayerInput("look");
 
         cout << game.processPlayerInput("go to Kitchen");
-        cout << endl << endl << endl;
+        cout << endl << endl ;
+        cout << "Press any key to continue or control + c to quit.";
+        cout << endl << endl;
         getchar();
 	}
 

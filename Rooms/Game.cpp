@@ -5,16 +5,15 @@ currentRoomStrings Game::getCurrentRoomStrings(){
     currentRoomStrings result;
     
     result.roomName = currentRoom->getRoomName();
-    result.currentEvent = currentRoom->getFirstActiveEvent();
 
 	//If we have an active event, print name, description and options
 	//and then call respondToEvent to handle user input
-	if(result.currentEvent != NULL){
+	if(currentRoom->getFirstActiveEvent() != NULL){
         result.activeEvent = true;
         result.roomDescription = "";
-        result.eventName = result.currentEvent->getEventName();
-        result.eventDescription = result.currentEvent->getEventDescription();
-        result.currentOptions = result.currentEvent->getEventOptions();
+        result.eventName = currentRoom->getFirstActiveEvent()->getEventName();
+        result.eventDescription = currentRoom->getFirstActiveEvent()->getEventDescription();
+        result.currentOptions = currentRoom->getFirstActiveEvent()->getEventOptions();
 	}
 	//Otherwise, print room stuff and do regular user input via getPlayerInput
 	else {

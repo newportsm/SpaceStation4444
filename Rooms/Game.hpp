@@ -18,7 +18,6 @@ struct currentRoomStrings{
     bool activeEvent;
     string eventName;
     string eventDescription;
-    Event * currentEvent;
     const vector<string> * currentOptions;
 };
 

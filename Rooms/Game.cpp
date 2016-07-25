@@ -1,54 +1,34 @@
 #include "Game.hpp"
 
-//Simple function for debugging.
-//prints all the info saved in each rooms (but not item/event vector)
-void Game::printRooms(){
-	vector<Room *>::const_iterator connIt;
-	std::vector<Room *>::const_iterator it;
-	for(it = rooms.begin(); it != rooms.end(); ++it){
-		cout << (*it)->getRoomName() << ": ";
-		connIt = (*it)->getCurrentRooms()->begin();
-		for(; connIt != (*it)->getCurrentRooms()->end(); ++connIt){
-			cout << (*connIt)->getRoomName() << "   ";
-		}
-		cout << endl;
-	}
-}
-
-//Main function called by game loop (for the moment)
-//Will print info for current room -- room name, description, etc.
-//If there is an active event, that is printed and then handled
-//before anything else happens
-void Game::printCurrentRoom(){
-	cout << "You are in the " << currentRoom->getRoomName() << endl;
-	
-	Event * currentEvent = currentRoom->getFirstActiveEvent();
+//This function gets information for current room and returns it as a struct. 
+currentRoomStrings Game::getCurrentRoomStrings(){
+    currentRoomStrings result;
+    
+    result.roomName = currentRoom->getRoomName();
+    result.currentEvent = currentRoom->getFirstActiveEvent();
 
 	//If we have an active event, print name, description and options
 	//and then call respondToEvent to handle user input
-	if(currentEvent != NULL){
-		cout << endl << currentEvent->getEventName() << endl;
-		cout << currentEvent->getEventDescription() << endl;
-		cout << "You can: ";
-		const vector<string> * currentOptions = currentEvent->getEventOptions();
-		vector<string>::const_iterator optIt;
-		for(optIt = currentOptions->begin(); optIt != currentOptions->end(); ++optIt){
-			cout << (*optIt) << ", ";
-		}
-		cout << endl;
-		respondToEvent(currentEvent, currentOptions);
+	if(result.currentEvent != NULL){
+        result.activeEvent = true;
+        result.roomDescription = "";
+        result.eventName = result.currentEvent->getEventName();
+        result.eventDescription = result.currentEvent->getEventDescription();
+        result.currentOptions = result.currentEvent->getEventOptions();
 	}
 	//Otherwise, print room stuff and do regular user input via getPlayerInput
 	else {
+        result.activeEvent = false;
 		if(!currentRoom->getVisited()){
-			cout << currentRoom->getLongDescription() << endl;
+            result.roomDescription =  currentRoom->getLongDescription();
 			currentRoom->changeVisited();
 		} else {
-			cout << currentRoom->getShortDescription() << endl;
+            result.roomDescription = currentRoom->getShortDescription();
 		}
-		cout << "The room seems to be quiet." << endl;
-		getPlayerInput();
+        result.eventName = "";
+		result.eventDescription = "The room seems to be quiet.";
 	}
+    return result;
 }
 
 //Simple function for splitting string into vector
@@ -68,96 +48,73 @@ void Game::inputToVector(string input){
 //Checks if input is in currentOptions and if it is, Event object's processEvent is called
 //and the result text is diplayed. The corresponding result keyword is also checked before
 //calling processEvent
-void Game::respondToEvent(Event * currentEvent, const vector<string> * currentOptions){
-	string input;
-	bool match = false;
-	do{
-		do{
-			cout << "What do you want to do?" << endl;
-			getline(cin, input);
-			cout << endl;
-
-		} while(input.length() < 1);
-		vector<string>::const_iterator optIt;
-		
-		for(optIt = currentOptions->begin(); optIt != currentOptions->end(); ++optIt){
-			if(input == (*optIt)){
-				cout << "You selected: " << (*optIt) << endl;
-				match = true;
-				vector<string>results(currentEvent->processEvent(input));
-				cout << results[0];
-				if(results[1] == "playerdied"){
-					playerHasDied();
-				} else if(results[1] == "continue"){
-					currentEvent->changeStatus();
-				}
-				cout << endl;
-			}
-		}
-		if(!match){
-			cout << "Sorry, I don't understand: " << input << endl;
-		}
-	}while(!match);
-}
-
-//Get input from player, then calls inputToVector to split it into vector
-//and then calls processPlayerInput to hanlde that vector
-void Game::getPlayerInput(){
-	string input;
-	do{
-		cout << "What do you want to do?" << endl;
-		getline(cin, input);
-		cout << endl;
-
-	} while(input.length() < 1);
-
-	inputToVector(input);
-	processPlayerInput();
+vector<string> Game::respondToEvent(string input){
+    vector<string>results;
+    bool match = false;
+    vector<string>::const_iterator optIt;
+    const vector<string> * currentOptions = currentRoom->getFirstActiveEvent()->getEventOptions();
+    
+    for(optIt = currentOptions->begin(); optIt != currentOptions->end(); ++optIt){
+        if(input == (*optIt)){
+            match = true;
+            results = currentRoom->getFirstActiveEvent()->processEvent(input);
+            if(results[1] == "playerdied"){
+                playerHasDied();
+            } else if(results[1] == "continue"){
+                currentRoom->getFirstActiveEvent()->changeStatus();
+            }
+        }
+    }
+    if(!match){
+        results.push_back( "Sorry, I don't understand: " );
+    }
+    return results;
 }
 
 //Searches vector of connected rooms and sets currentRoom to be
 //pointer to that room or displays error message
-void Game::go(string location){
+string Game::go(string location){
 	vector<Room *>::iterator roomIt;
-	Room * checkRoom = currentRoom;
+	//Room * checkRoom = currentRoom;
 	for(roomIt = rooms.begin(); roomIt != rooms.end(); ++roomIt){
 		string roomName = (*roomIt)->getRoomName();
-		if(location == roomName)
+		if(location == roomName){
 			currentRoom = (*roomIt);
+            return "ok";
+        }
 	}
-	if(checkRoom == currentRoom){
-		cout << "Sorry, that room cannot be reached from here." << endl;
-	}
+    return "Sorry, that room cannot be reached from here.";
 }
 
 //Lists all the items that can be picked up and
 //the connected rooms
-void Game::look(){
+string Game::look(){
+    string result = "";
 	const vector<Room *> * connectedRooms;
 	connectedRooms = currentRoom->getCurrentRooms();
 	const vector<Item *> * itemsInRoom;
 	itemsInRoom = currentRoom->getCurrentItems();
 	vector<Room *>::const_iterator roomIt;
-	cout << "You can go to these rooms: ";
+	result += "You can go to these rooms: ";
 	for(roomIt = connectedRooms->begin(); roomIt != connectedRooms->end(); ++roomIt){
-		cout << (*roomIt)->getRoomName() << ", ";
+		result += (*roomIt)->getRoomName() + ", ";
 	}
-	cout << endl;
 	vector<Item *>::const_iterator itemIt;
-	cout << "You can grab these items: ";
+	result += "You can grab these items: ";
 	for(itemIt = itemsInRoom->begin(); itemIt != itemsInRoom->end(); ++itemIt){
-		cout << (*itemIt)->getItemName() << ", ";
+		result += (*itemIt)->getItemName() + ", ";
 	}
-	cout << endl << endl;
+    return result;
 }
 
 //Picks up an item, which means the item is added to the items vector
 //held by the player and removes the pointer from the room's items vector
-void Game::grab(string item){
+string Game::grab(string item){
 	const vector<Item *> * itemsInRoom;
 	itemsInRoom = currentRoom->getCurrentItems();
 	vector<Item *>::const_iterator itemIt;
 	bool itemFound = false;
+    string result = "";
 	for(itemIt = itemsInRoom->begin(); itemIt != itemsInRoom->end(); ++itemIt){
 		string itemName = (*itemIt)->getItemName();
 		if(itemName == item){
@@ -166,48 +123,50 @@ void Game::grab(string item){
 			Item * newItem = new Item(itemName, itemDesc);
 			player.addItem(newItem);
 			currentRoom->removeItem((*itemIt));
-			cout << "You have picked up " << newItem->getItemName() << endl << endl;
+			result =  "You have picked up " + newItem->getItemName();
 			itemFound = true;
-			return;
+			return result;
 		}
 
 	}
 	if(!itemFound){
-		cout << "Sorry that item is not in this room." << endl;
+		result = "Sorry that item is not in this room.";
 	}
+    return result;
 }
 
 //Displays all the items in the player's items vector
-void Game::checkItemsInHand(){
+string Game::checkItemsInHand(){
 	const vector<Item *> * items = player.getCurrentItems();
 	vector<Item *>::const_iterator itemIt;
-	cout << "You currently are holding: ";
+    string results = "";
+	results =  "You currently are holding: ";
 	for(itemIt = items->begin(); itemIt != items->end(); ++itemIt){
-		cout << (*itemIt)->getItemName() << ", ";
+		results += (*itemIt)->getItemName() + ", ";
 	}
-	cout << endl;
+    return results;
 }
 
 //Uses currentCommand calls appropriate function matching command
-void Game::processPlayerInput(){
+string Game::processPlayerInput(string input){
 
+    inputToVector(input);
 	if(currentCommand[0] ==  "go"){
 		if(currentCommand.size() > 1){
 			if(currentCommand[1] == "to"){
-				cout << "Let's go!" << endl << endl;
 				string location = "";
 				for(unsigned int i = 2; i < currentCommand.size(); i++){
 					location += currentCommand[i] + " ";
 				}
 				location = location.substr(0, location.length() - 1);
-				go(location);
+				return go(location);
 			}
 		}
 	} else if (currentCommand[0] == "go"){
-		cout << "Where do you want to go?" << endl;
+		return "Where do you want to go?";
 	}
 	else if(currentCommand[0] == "look"){
-		look();
+		return look();
 	}	
 	else if(currentCommand[0] == "grab"){	
 		if(currentCommand.size() > 1){
@@ -216,19 +175,18 @@ void Game::processPlayerInput(){
 				item += currentCommand[i] + " ";
 			}
 			item = item.substr(0, item.length() - 1);
-			grab(item);
+			return grab(item);
 		} else {
-			cout << "What would you like to grab?" << endl << endl;
+			return "What would you like to grab?";
 		}
 	}
 	else if(currentCommand[0] == "check"){
-		checkItemsInHand();
+		return checkItemsInHand();
 	}
 	else if(currentCommand[0] == "quit"){
-		cout << "Good-bye!" << endl << endl;
-		playerHasDied();
+        playerHasDied();
+		return "Good-bye!"; 
 	}
-	else
-		cout << "Sorry, I don't understand." << endl << endl;
+	return "Sorry, I don't understand.";
 }
 

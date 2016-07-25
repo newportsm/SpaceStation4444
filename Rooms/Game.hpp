@@ -12,6 +12,16 @@ using std::vector;
 using std::string;
 using std::cin;
 
+struct currentRoomStrings{
+    string roomName;
+    string roomDescription;
+    bool activeEvent;
+    string eventName;
+    string eventDescription;
+    Event * currentEvent;
+    const vector<string> * currentOptions;
+};
+
 class Game{
 	private:
 		Player player;
@@ -30,14 +40,13 @@ class Game{
 		void inputToVector(string input);
 		void printRooms();
 		void printCurrentRoom();
-		void getPlayerInput();
-		void processPlayerInput();
-		void look();
-		void go(string location);
-		void grab(string item);
-		void checkItemsInHand();
-		void respondToEvent(Event * currentEvent, const vector<string> * currentOptions);
-
+		string processPlayerInput(string input);
+		string look();
+		string go(string location);
+		string grab(string item);
+		string checkItemsInHand();
+		vector<string> respondToEvent(string input);
+        currentRoomStrings getCurrentRoomStrings();
 };
 
 

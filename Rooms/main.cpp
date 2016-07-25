@@ -12,6 +12,7 @@ int main(){
 	cout << "Use 'look' to see what items are in a room and what the connected rooms are." << endl;
 	cout << "Use 'grab [exact item name]' to pick up an item" << endl;
 	cout << "Use 'quit' to exit. (Will not work when responding to an event." << endl << endl;
+	cout << "Use 'help' at any point during the game to see these instructions again" << endl;
 
 	while(game.getPlayerStatus()){
 		//game.printCurrentRoom();

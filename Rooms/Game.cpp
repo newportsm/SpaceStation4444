@@ -183,11 +183,11 @@ string Game::processPlayerInput(string input){
 		return checkItemsInHand();
 	}
 	else if(currentCommand[0] == "help") {
-		instructions = "Use 'go to [exact room name]' to move to another room.\n" + 
-		"Use 'look' to see what items are in a room and what the connected rooms are.\n" +
-		"Use 'grab [exact item name]' to pick up an item.\n" +
-		"Use 'quit' to exit. (Will not work when responding to an event.\n" + 
-		"Use 'help' at any point during the game to see these instructions again.\n"; 
+		string instructions = "Use 'go to [exact room name]' to move to another room.\n"; 
+		instructions += "Use 'look' to see what items are in a room and what the connected rooms are.\n"; 
+		instructions += "Use 'grab [exact item name]' to pick up an item.\n";
+		instructions += "Use 'quit' to exit. (Will not work when responding to an event.\n";
+		instructions += "Use 'help' at any point during the game to see these instructions again.\n"; 
 		return instructions;
 	}
 	else if(currentCommand[0] == "quit"){

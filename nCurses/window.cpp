@@ -36,6 +36,9 @@ int main(int argc, char* argv[])
     int bottom_size = 3;
 
     initscr();
+    cbreak();     
+    noecho(); 
+    keypad(stdscr,TRUE);
 
     // set up the initial windows
     getmaxyx(stdscr, parent_y, parent_x);
@@ -49,10 +52,10 @@ int main(int argc, char* argv[])
     start_color();
     init_pair(1, COLOR_WHITE, COLOR_BLACK);
 
-    bkgdset(COLOR_PAIR(1));
-    wbkgdset(top, COLOR_PAIR(1));
-    wbkgdset(middle, COLOR_PAIR(1));
-    wbkgdset(bottom, COLOR_PAIR(1));
+    bkgd(COLOR_PAIR(1));
+    wbkgd(top, COLOR_PAIR(1));
+    wbkgd(middle, COLOR_PAIR(1));
+    wbkgd(bottom, COLOR_PAIR(1));
     
     // run through and call borders function for each window
     draw_borders(top);
@@ -97,5 +100,6 @@ int main(int argc, char* argv[])
     }
 
     endwin();
+ 
     return 0;
 }

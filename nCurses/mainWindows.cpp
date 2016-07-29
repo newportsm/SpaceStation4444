@@ -35,14 +35,17 @@ int main(int argc, char* argv[])
     int middle_size = 12;
     int bottom_size = 3;
 
-
     initscr();
     noecho();
     curs_set(FALSE);
     keypad(stdscr, TRUE);
 
     // get our maximum window dimensions
-    getmaxyx(stdscr, parent_y, parent_x);
+    //getmaxyx(stdscr, parent_y, parent_x);
+    
+    // preset window settings
+    parent_x = 125;
+    parent_y = 30;
     
     // set up the initial windows
     WINDOW* top = newwin(parent_y - middle_size, parent_x, 0, 0);

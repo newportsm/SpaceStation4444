@@ -1,5 +1,9 @@
+#include <iostream>
 #include <ncurses.h>
 #include <unistd.h>
+#include <string>
+
+using namespace std;
 
 // function to draw borders around windows
 void draw_borders(WINDOW* screen)
@@ -34,6 +38,8 @@ int main(int argc, char* argv[])
     int parent_x, parent_y;
     int middle_size = 12;
     int bottom_size = 3;
+    char TitleScreen[] ="   _____                         _____ _        _   _ \n                 / ____|                       / ____| |      | | (_)         \n                | (___  _ __   __ _  ___ ___  | (___ | |_ __ _| |_ _  ___  _ __ \n                 \\___ \\| '_ \\ / _` |/ __/ _ \\  \\___ \\| __/ _` | __| |/ _ \\| '_ \\ \n                 ____) | |_) | (_| | (_|  __/  ____) | || (_| | |_| | (_) | | | |\n                |_____/| .__/ \\__,_|\\___\\___| |_____/ \\__\\__,_|\\__|_|\\___/|_| |_| \n                       | |       _  _   _  _   _  _   _  _ \n                       |_|      | || | | || | | || | | || |\n                                | || |_| || |_| || |_| || |_ \n                                |__   _|__   _|__   _|__   _|\n                                   | |    | |    | |    | |\n                                   |_|    |_|    |_|    |_|";
+
 
     initscr();
     noecho();
@@ -61,15 +67,14 @@ int main(int argc, char* argv[])
     wbkgd(middle, COLOR_PAIR(1));
     wbkgd(bottom, COLOR_PAIR(1));
     
-    // draw borders
+    // draw to our windows
+    mvwprintw(top, 3, 15, TitleScreen);
+    mvwprintw(middle, 1, 1, "TEXT DESCRIPTION WINDOW");
+    mvwprintw(bottom, 1, 1, "TEXT INPUT WINDOW");
+    
     draw_borders(top);
     draw_borders(middle);
     draw_borders(bottom);
-    
-    // draw to our windows
-    mvwprintw(top, 1, 1, "GRAPHICS WINDOW");
-    mvwprintw(middle, 1, 1, "TEXT DESCRIPTION WINDOW");
-    mvwprintw(bottom, 1, 1, "TEXT INPUT WINDOW");
     
     // refresh each window
     refresh();

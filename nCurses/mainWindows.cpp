@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
     //getmaxyx(stdscr, parent_y, parent_x);
     
     // preset window settings
-    parent_x = 125;
+    parent_x = 110;
     parent_y = 30;
     
     // set up the initial windows

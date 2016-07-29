@@ -8,16 +8,21 @@ std::string getFileContents (std::ifstream&);
 int main(int argc, char *argv[])
 {
     // open file with file path
-    std::ifstream Reader ("graphics/title.txt");            
+    std::ifstream Title ("graphics/title.txt");
 
     // get file contents and place into ART
-    std::string Art = getFileContents (Reader);
+    std::string OpeningTitle = getFileContents (Title);
     
     //print contents to screen
-    std::cout << Art << std::endl;               
+    std::cout << OpeningTitle << std::endl;               
 
     // close file
-    Reader.close ();                    
+    Title.close ();
+    
+    std::ifstream Space ("graphics/spaceship1.txt");
+    std::string SpaceShip = getFileContents (Space);
+    std::cout << SpaceShip << std::endl;               
+    Space.close ();  
 
     return 0;
 }

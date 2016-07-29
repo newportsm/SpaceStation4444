@@ -39,6 +39,7 @@ int main(int argc, char* argv[])
     cbreak();     
     noecho(); 
     keypad(stdscr,TRUE);
+    curs_set(0);
 
     // set up the initial windows
     getmaxyx(stdscr, parent_y, parent_x);

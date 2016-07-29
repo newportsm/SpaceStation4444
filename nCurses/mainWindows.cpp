@@ -39,6 +39,7 @@ int main(int argc, char* argv[])
     initscr();
     noecho();
     curs_set(FALSE);
+    keypad(stdscr, TRUE);
 
     // get our maximum window dimensions
     getmaxyx(stdscr, parent_y, parent_x);

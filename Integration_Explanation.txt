@@ -1,0 +1,8 @@
+Progress on Integration:
+
+	So far I've combined the basics from mainWindows.cpp file in ncurses and the main.cpp file from Rooms.
+	I've altered a few of the displays from main.cpp into char[] and passed them to proper display function.
+	I still cannot seem to compile ncurses so I have no idea if its working but the theory seems sound based
+	on documentation from both teammates. 
+
+Will continue to fuss with displays and hope someone can confirm that I haven't broken anything :)

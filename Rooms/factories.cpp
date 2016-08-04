@@ -82,6 +82,7 @@ int roomFactory(vector<Room *> * rooms){
 		//(in case there's a carriage return added by Windows)
 		std::getline(roomFile, name);
 		name = cleanStrings(name);
+        cout << name << endl;
 		std::getline(roomFile, longDesc);
 		longDesc = cleanStrings(longDesc);
 		std::getline(roomFile, shortDesc);

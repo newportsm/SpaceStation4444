@@ -15,6 +15,7 @@ int main(){
 	cout << "Use 'help' at any point during the game to see these instructions again" << endl;
 
 	while(game.getPlayerStatus()){
+        string input;
 		//game.printCurrentRoom();
         currentRoomStrings res = game.getCurrentRoomStrings();
         cout << res.roomName << endl;
@@ -23,17 +24,21 @@ int main(){
         cout << res.eventDescription << endl;
         if(res.activeEvent){ 
             cout << res.currentOptions->at(0) << endl;
-            vector<string> rez = game.respondToEvent("flash with flashlight");
-            cout << rez[0] << " " << rez[1] << endl;
-        };
-        cout << game.processPlayerInput("look");
+            getline(cin, input);
+            vector<string> rez = game.respondToEvent(input);
+            for(unsigned int i = 0; i < rez.size(); i++)
+                cout << rez[i] << endl;
+        } else {
+            getline(cin, input);
+            cout << game.processPlayerInput(input) << endl;
+        }
+        /*cout << game.processPlayerInput("look");
 
         cout << game.processPlayerInput("go to Kitchen");
         cout << game.processPlayerInput("help");
         cout << endl << endl ;
         cout << "Press any key to continue or control + c to quit.";
-        cout << endl << endl;
-        getchar();
+        cout << endl << endl;*/
 	}
 
 	return 0;

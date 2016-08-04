@@ -46,6 +46,8 @@ class Game{
 		string checkItemsInHand();
 		vector<string> respondToEvent(string input);
         currentRoomStrings getCurrentRoomStrings();
+        string locationAlias(string input);
+
 };
 
 

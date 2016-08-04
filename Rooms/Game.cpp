@@ -65,7 +65,7 @@ vector<string> Game::respondToEvent(string input){
         }
     }
     if(!match){
-        results.push_back( "Sorry, I don't understand: " );
+        results.push_back( "Sorry, I don't understand: " + input );
     }
     return results;
 }
@@ -99,7 +99,7 @@ string Game::look(){
 		result += (*roomIt)->getRoomName() + ", ";
 	}
 	vector<Item *>::const_iterator itemIt;
-	result += "You can grab these items: ";
+	result += "You can grab or inspect these items: ";
 	for(itemIt = itemsInRoom->begin(); itemIt != itemsInRoom->end(); ++itemIt){
 		result += (*itemIt)->getItemName() + ", ";
 	}
@@ -126,7 +126,6 @@ string Game::grab(string item){
 			itemFound = true;
 			return result;
 		}
-
 	}
 	if(!itemFound){
 		result = "Sorry that item is not in this room.";
@@ -146,10 +145,42 @@ string Game::checkItemsInHand(){
     return results;
 }
 
+string Game::locationAlias(string input){
+    string output = "";
+    for(unsigned int i = 0; i < input.length(); i++){
+        output += tolower(input[i]);
+    }
+    if(output.substr(0, 3) == "kit") output = "Kitchen";
+    if(output.substr(0, 3) == "bri") output = "Bridge";
+    if(output.substr(0, 3) == "sle"){
+        if(output[output.length() - 1] == '1')
+            return "Sleeping Quarters 1";
+        else
+            return "Sleeping Quarters 2";
+    }
+    if(output.substr(0, 3) == "equ") output = "Equipment Room";
+    if(output.substr(0, 3) == "con") output = "Connection Tube";
+    if(output.substr(0, 3) == "eng") output = "Engine Room";
+    if(output.substr(0, 3) == "tra") output = "Training Room";
+    if(output.substr(0, 3) == "sci") output = "Science Room";
+    if(output.substr(0, 3) == "sto") output = "Storage Room";
+    if(output.substr(0, 3) == "wea") output = "Weapons Room";
+    if(output.substr(0, 3) == "com") output = "Computer Room";
+    if(output.substr(0, 3) == "loc") output = "Locker Room";
+    if(output.substr(0, 3) == "esc") output = "Escape Pods";
+    if(output.substr(0, 3) == "com") output = "Computer Room";
+    if(output.substr(0, 3) == "obs") output = "Observatory";
+
+
+    cout << output << endl << endl;
+    return output;
+}
+
 //Uses currentCommand calls appropriate function matching command
 string Game::processPlayerInput(string input){
 
     inputToVector(input);
+
 	if(currentCommand[0] ==  "go"){
 		if(currentCommand.size() > 1){
 			if(currentCommand[1] == "to"){
@@ -158,6 +189,7 @@ string Game::processPlayerInput(string input){
 					location += currentCommand[i] + " ";
 				}
 				location = location.substr(0, location.length() - 1);
+                location = locationAlias(location);
 				return go(location);
 			}
 		}

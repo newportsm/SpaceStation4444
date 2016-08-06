@@ -161,17 +161,7 @@ vector<string> Game::respondToEvent(string input){
 			else if(currentRoom->getFirstActiveEvent()->getEventName() == "Flying Through the Tube"){
 				if(input == "go through tube"){
 					vector<Item *>::const_iterator itemIt;
-					bool hasHelmet = false;
-					bool hasSuit = false;
-					bool hasTube = false;
-					bool hasTape = false;
-					for(itemIt = player.getCurrentItems()->begin(); itemIt != player.getCurrentItems()->end(); itemIt++){
-						if((*itemIt)->getItemName() == "helmet") hasHelmet = true;
-						if((*itemIt)->getItemName() == "space suit") hasSuit = true;
-						if((*itemIt)->getItemName() == "tube") hasTube = true;
-						if((*itemIt)->getItemName() == "duct tape") hasTape = true;
-					}
-			        if(hasSuit && hasHelmet && hasTape && hasTube){
+			        if(spaceSuitIsRepaired && helmestIsRepaired){
 						match = true;
 						results = currentRoom->getFirstActiveEvent()->processEvent(input);
 						if(results[1] == "playerdied"){
@@ -182,11 +172,11 @@ vector<string> Game::respondToEvent(string input){
 					}
 					else {
 						match = true;
-						if(hasSuit && hasHelmet){
+						if(!helmestIsRepaired && !spaceSuitIsRepaired){
 							results.push_back("Oh no! You should have pateched your suit and helmet! Your protective gear can't withstand the vacuum!");
 							results.push_back("playdied");
 						}
-						else if(!hasHelmet){
+						else if(!helmestIsRepaired){
 							results.push_back("You might have thought you could just hold your breath, but the cold of space and the cloud of metal flakes has other ideas. At least death in space is cooler than a car accident.");
 							results.push_back("playdied");
 						} else {
@@ -260,6 +250,28 @@ string Game::open(string item){
 	
 	if(result == ""){
 		result = "Can't open " + item + ".";
+	}
+	return result;
+}
+
+string Game::fly(string item){
+	string result = "";
+	if(!navigationSystemInstalled)
+		return "You need to install the navigation system before you can fly the escape pod.";
+
+	vector<Item *>::const_iterator roomItems;
+	
+	for(roomItems = currentRoom->getCurrentItems()->begin(); roomItems != currentRoom->getCurrentItems()->end(); roomItems++){
+		if((*roomItems)->getItemName() == item){
+			if(item == "escape pod"){
+				result = "You have successfully escaped! Congratulations!";
+				playerHasDied();
+			}
+		}
+	}
+	
+	if(result == ""){
+		result = "Can't fly " + item + ".";
 	}
 	return result;
 }
@@ -419,7 +431,7 @@ string Game::itemAlias(string input){
     if(output.substr(0, 3) == "nav") output = "navigation system";
     if(output.substr(0, 3) == "dra") output = "drawers";
     if(output.substr(0, 3) == "wal") output = "walls";
-    if(output.substr(0, 3) == "kit") output = "kitchen sink";
+    if(output.substr(0, 3) == "foo") output = "food box";
     if(output.substr(0, 3) == "cab") output = "cabinet";
     if(output.substr(0, 3) == "per") output = "personal locker";
     if(output.substr(0, 3) == "ser") output = "service locker";
@@ -484,6 +496,108 @@ string Game::roomAlias(string input){
     return output;
 }
 
+string Game::install(string item1, string item2){
+	if(item1 == "navigation system" && item2 == "escape pod"){
+		bool hasEscapePod = false;
+		bool hasNavSystem = false;
+		vector<Item *>::const_iterator itemIt;
+		for(itemIt = currentRoom->getCurrentItems()->begin(); itemIt != currentRoom->getCurrentItems()->end(); itemIt++){
+			if((*itemIt)->getItemName() == "escape pod") hasEscapePod = true;
+		}
+		if(!hasEscapePod) return "There is no escape pod to insert the battery into!";
+		vector<Item *>::const_iterator itemIt2;
+		for(itemIt2 = player.getCurrentItems()->begin(); itemIt2 != player.getCurrentItems()->end(); itemIt2++){
+			if((*itemIt2)->getItemName() == "navigation system"){
+				hasNavSystem = true;
+				break;
+			}
+		}
+		if(!hasNavSystem) return "You should probably find the battery pack before you try to use it...";
+		player.removeItem((*itemIt2));
+		navigationSystemInstalled = true;
+		return "The navigation system is installed. Now you can fly out of here!!";
+	} 
+	else {
+		return "I don't think that fits in there the way you think it does...";
+	}
+}
+string Game::insert(string item1, string item2){
+	if(item1 == "battery pack" && item2 == "slot for battery"){
+		bool hasBatterySlot = false;
+		bool hasBatteryPack = false;
+		vector<Item *>::const_iterator itemIt;
+		for(itemIt = currentRoom->getCurrentItems()->begin(); itemIt != currentRoom->getCurrentItems()->end(); itemIt++){
+			if((*itemIt)->getItemName() == "slot for battery") hasBatterySlot = true;
+		}
+		if(!hasBatterySlot) return "There is no slot to insert the battery into!";
+		vector<Item *>::const_iterator itemIt2;
+		for(itemIt2 = player.getCurrentItems()->begin(); itemIt2 != player.getCurrentItems()->end(); itemIt2++){
+			if((*itemIt2)->getItemName() == "battery pack"){
+				hasBatteryPack = true;
+				break;
+			}
+		}
+		if(!hasBatteryPack) return "You should probably find the battery pack before you try to use it...";
+		player.removeItem((*itemIt2));
+		for(itemIt2 = currentRoom->getCurrentItems()->begin(); itemIt2 != currentRoom->getCurrentItems()->end(); itemIt2++){
+			if((*itemIt2)->getItemName() == "navigation system"){
+				(*itemIt2)->makeVisible();
+				break;
+			}
+		}
+		//(*itemIt)->setItemDescription("The computer is running now thanks to the battery pack.");
+		return "The computer terminal is on! Now you can grab the navigation system!";
+	} else if(item1 == "tube" && item2 == "space suit"){
+		bool hasSpaceSuit = false;
+		bool hasTube = false;
+		vector<Item *>::const_iterator itemIt;
+		for(itemIt = player.getCurrentItems()->begin(); itemIt != player.getCurrentItems()->end(); itemIt++){
+			if((*itemIt)->getItemName() == "space suit") hasSpaceSuit = true;
+		}
+		if(!hasSpaceSuit) return "You don't even have a space suit yet!";
+		vector<Item *>::const_iterator itemIt2;
+		for(itemIt2 = player.getCurrentItems()->begin(); itemIt2 != player.getCurrentItems()->end(); itemIt2++){
+			if((*itemIt2)->getItemName() == "tube"){
+				hasTube = true;
+				break;
+			}
+		}
+		if(!hasTube) return "Maybe you should try finding a tube first.";
+		player.removeItem((*itemIt2));
+		spaceSuitIsRepaired = true;
+		return "You've fixed the space suit!";
+	} 
+	else {
+		return "I don't think that fits in there the way you think it does...";
+	}
+}
+
+string Game::patch(string item1, string item2){
+	cout << item1 << " " << item2 << endl;
+	if(item1 == "helmet" && item2 == "duct tape"){
+		bool hasHelmet = false;
+		bool hasDuctTape = false;
+		vector<Item *>::const_iterator itemIt;
+		for(itemIt = player.getCurrentItems()->begin(); itemIt != player.getCurrentItems()->end(); itemIt++){
+			if((*itemIt)->getItemName() == "helmet") hasHelmet = true;
+		}
+		if(!hasHelmet) return "You should probably try finding the helmet first!";
+		vector<Item *>::const_iterator itemIt2;
+		for(itemIt2 = player.getCurrentItems()->begin(); itemIt2 != player.getCurrentItems()->end(); itemIt2++){
+			if((*itemIt2)->getItemName() == "duct tape"){
+				hasDuctTape = true;
+				break;
+			}
+		}
+		if(!hasDuctTape) return "You don't even have the duct tape yet!";
+		helmestIsRepaired = true;
+		player.removeItem((*itemIt2));
+		return "You have patched your helmet with the duct tape..";
+	} else {
+		return "Well, that was a nice try, but it didn't do anything.";
+	}
+}
+
 string Game::hit(string item1, string item2){
 	if(item1 == "emergency battery locker" && item2 == "dumbbell"){
 		bool hasLocker = false;
@@ -502,7 +616,7 @@ string Game::hit(string item1, string item2){
 		}
 		if(!hasDumbbell) return "That didn't do anything. You need something heavy and sturdy.";
 		(*itemIt2)->makeVisible();
-		(*itemIt)->setItemDescription("The emergency battery locker is open.");
+		//(*itemIt)->setItemDescription("The emergency battery locker is open.");
 		return "The emergency battery locker is open! Now you can grab a battery pack.";
 	} else {
 		return "Well, that's not going to do anything.";
@@ -595,6 +709,19 @@ string Game::processPlayerInput(string input){
 			return "What would you like to open?";
 		}
 	}
+	else if(currentCommand[0] == "fly"){
+		if(currentCommand.size() > 1){
+			string item = "";
+			for(unsigned int i = 1; i < currentCommand.size(); i++){
+				item += currentCommand[i] + " ";
+			}
+			item = item.substr(0, item.length() - 1);
+			item = itemAlias(item);
+			return fly(item);
+		} else {
+			return "What would you like to fly?";
+		}
+	}
 	else if(currentCommand[0] == "hit"){
 		if(currentCommand.size() > 3){
 			string item1 = "";
@@ -619,6 +746,83 @@ string Game::processPlayerInput(string input){
 			return hit(item1, item2);
 		} else {
 			return "What would you like to hit and what would you like to hit it with?";
+		}
+	} else if(currentCommand[0] == "patch"){
+		if(currentCommand.size() > 3){
+			string item1 = "";
+			string item2 = "";
+			int withPos = 0;
+			for(unsigned int i = 1; i < currentCommand.size(); i++){
+				if(currentCommand[i] == "with"){
+					withPos = i;
+					break;
+				}
+				item1 += currentCommand[i] + " ";
+			}
+			item1 = item1.substr(0, item1.length() - 1);
+			item1 = itemAlias(item1);
+			
+			for(unsigned int i = withPos + 1; i < currentCommand.size(); i++){
+				item2 += currentCommand[i] + " ";
+			}
+			item2 = item2.substr(0, item2.length() - 1);
+			item2 = itemAlias(item2);
+
+			return patch(item1, item2);
+		} else {
+			return "What would you like to patch and what would you like to patch it with?";
+		}
+	}
+	else if(currentCommand[0] == "insert"){
+		if(currentCommand.size() > 3){
+			string item1 = "";
+			string item2 = "";
+			int intoPos = 0;
+			for(unsigned int i = 1; i < currentCommand.size(); i++){
+				if(currentCommand[i] == "into"){
+					intoPos = i;
+					break;
+				}
+				item1 += currentCommand[i] + " ";
+			}
+			item1 = item1.substr(0, item1.length() - 1);
+			item1 = itemAlias(item1);
+			
+			for(unsigned int i = intoPos + 1; i < currentCommand.size(); i++){
+				item2 += currentCommand[i] + " ";
+			}
+			item2 = item2.substr(0, item2.length() - 1);
+			item2 = itemAlias(item2);
+
+			return insert(item1, item2);
+		} else {
+			return "What would you like to insert into what?";
+		}
+	}
+	else if(currentCommand[0] == "install"){
+		if(currentCommand.size() > 3){
+			string item1 = "";
+			string item2 = "";
+			int intoPos = 0;
+			for(unsigned int i = 1; i < currentCommand.size(); i++){
+				if(currentCommand[i] == "into"){
+					intoPos = i;
+					break;
+				}
+				item1 += currentCommand[i] + " ";
+			}
+			item1 = item1.substr(0, item1.length() - 1);
+			item1 = itemAlias(item1);
+			
+			for(unsigned int i = intoPos + 1; i < currentCommand.size(); i++){
+				item2 += currentCommand[i] + " ";
+			}
+			item2 = item2.substr(0, item2.length() - 1);
+			item2 = itemAlias(item2);
+
+			return install(item1, item2);
+		} else {
+			return "What would you like to insert into what?";
 		}
 	}
 	else if(currentCommand[0] == "help") {

@@ -17,6 +17,7 @@ class Player{
 		void removeItem( Item * oldItem){
 			vector<Item *>::iterator it;
 			for(it = items.begin(); it != items.end(); ++it){
+				std::cout << (*it)->getItemName() << std::endl;
 				if(*it == oldItem){
 					items.erase(it);
 					break;

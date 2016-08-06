@@ -27,16 +27,18 @@ class Game{
 		vector<Room *> rooms;
 		Room * currentRoom;
 		bool playerIsAlive;
-		bool suitIsRepaired;
+		bool spaceSuitIsRepaired;
 		bool helmestIsRepaired;
+		bool navigationSystemInstalled;
 		vector<string> currentCommand;
 	public:
 		Game(){
 			loadGame(&rooms);
 			currentRoom = rooms[0];
 			playerIsAlive = true;
-			suitIsRepaired = false;
+			spaceSuitIsRepaired = false;
 			helmestIsRepaired = false;
+			navigationSystemInstalled = false;
 		}
 		bool getPlayerStatus(){ return playerIsAlive; }
 		void playerHasDied(){ playerIsAlive = false; }
@@ -57,9 +59,10 @@ class Game{
 		string getRoomStatus();
 		string open(string item);
 		string hit(string item1, string item2);
-
-
-
+		string insert(string item1, string item2);
+		string patch(string item1, string item2);
+		string install(string item1, string item2);
+		string fly(string item); 
 };
 
 

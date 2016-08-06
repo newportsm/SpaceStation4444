@@ -1,15 +1,16 @@
+Bridge,Locker Room,Kitchen*
 Kitchen,Bridge,Equipment Room*
-Bridge,Kitchen,Locker Room*
+Equipment Room,Kitchen,Entrance to Connection Tube*
+Entrance to Connection Tube,Equipment Room,Connection Tube*
 Locker Room,Sleeping Quarters 1,Bridge*
-Sleeping Quarters 1,Locker Room,Sleeping Quarters 2*
-Sleeping Quarters 2,Sleeping Quarters 1*
-Equipment Room,Bridge,Connection Tube*
-Connection Tube,Equipment Room,Engine Room,Computer Room*
-Engine Room,Training Room*
-Training Room,Engine Room,Science Lab*
-Science Lab,Training Room,Escape Pods*
+Sleeping Quarters 1,Sleeping Quarters 2,Locker Room*
+Sleeping Quarters 2,0,Sleeping Quarters 1*
+Connection Tube,Engine Room,Computer Room*
+Engine Room,Training Room,0*
+Training Room,Science Lab,Engine Room*
+Science Lab,Escape Pods,Training Room*
 Escape Pods,Storage Room,Science Lab*
 Storage Room,Weapons Room,Escape Pods*
 Weapons Room,Computer Room,Storage Room*
 Computer Room,Weapons Room,Observatory*
-Observatory,Computer Room*
+Observatory,0,Computer Room*

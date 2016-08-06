@@ -1,7 +1,7 @@
-Broken Ladder
-The ladder to the connection tube is broken.
-Connection Tube
-jump for tube door;turn off gravity;build a ladder*
-jump for tube door:"One, two, three!" You shout and through yourself up -- only to fall, slip, and land on your butt. Maybe there's a better idea.;nothing*
-turn off gravity:Smart move! Now you can float up to the door and then float to the other ring!;continue*
-build a ladder:Building a ladder with all the debris sounds like a good idea -- until you fall and a piece off a broken chair punctures you head.;playerdied*
+Retracted Ladder
+The ladder to the connection tube is retracted. The emergency protocols must have locked the station down, thinking it was an attack.
+Entrance to Connection Tube
+jump tube door;lower ladder;build ladder;leave room*
+jump tube door:"One, two, three!" You shout and through yourself up -- only to fall, slip, and land on your butt. Maybe there's a better idea.;nothing*
+lower ladder:Smart move! Now you can climb up to the door and then pass through the tube to the other ring!;continue*
+build ladder:Building a ladder with all the debris sounds like a good idea -- until you fall and a piece off a broken chair punctures you skull.;playerdied*

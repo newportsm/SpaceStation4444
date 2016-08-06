@@ -82,7 +82,6 @@ int roomFactory(vector<Room *> * rooms){
 		//(in case there's a carriage return added by Windows)
 		std::getline(roomFile, name);
 		name = cleanStrings(name);
-        cout << name << endl;
 		std::getline(roomFile, longDesc);
 		longDesc = cleanStrings(longDesc);
 		std::getline(roomFile, shortDesc);
@@ -170,6 +169,10 @@ int itemFactory(vector<Room *> * rooms){
 	string name;
 	string description;
 	string roomName;
+	string container;
+	string input;
+	bool canGrab;
+	bool visible;
 	int count = 1;
 	string fileName = "items/item" + std::to_string(count);
 	std::fstream itemFile;
@@ -181,16 +184,40 @@ int itemFactory(vector<Room *> * rooms){
 	while(itemFile.is_open()){
 		std::getline(itemFile, name);
 		name = cleanStrings(name);
+		
 		std::getline(itemFile, description);
 		description = cleanStrings(description);
+		
 		std::getline(itemFile, roomName);
 		roomName = cleanStrings(roomName);
-		Item * newItem = new Item(name, description);
+		
+		std::getline(itemFile, container);
+		container = cleanStrings(container);
+		
+		std::getline(itemFile, input);
+		if(input[0] == 'G') canGrab = true;
+		else canGrab = false;
+		input = "";
+		
+		std::getline(itemFile, input);
+		if(input[0] == 'V') visible = true;
+		else visible = false;
+		
+		Item * newItem = new Item(name, description, canGrab, visible);
 		vector<Room *>::iterator it;
 		for(it = rooms->begin(); it != rooms->end(); ++it){
 			string curRoomName = cleanStrings((*it)->getRoomName());
-			if(curRoomName == roomName)
+			if(curRoomName == roomName){
 				(*it)->addItem(newItem);
+				if(container != "0") {
+					vector<Item *>::const_iterator itemIt;
+				   	for(itemIt = (*it)->getCurrentItems()->begin(); itemIt != (*it)->getCurrentItems()->end(); itemIt++){
+						if((*itemIt)->getItemName() == container){
+							(*itemIt)->setHeldItem(newItem);
+						}
+					}
+				}
+			}
 		}
 		itemFile.close();
 		count++;
@@ -277,7 +304,6 @@ int eventFactory(vector<Room *> * rooms){
 
 		//Find the room it belongs to...
 		vector<Room *>::iterator it;
-		//cout << "Add events to rooms" << endl;
 		for(it = rooms->begin(); it != rooms->end(); ++it){
 			string roomName = cleanStrings((*it)->getRoomName());
 			if(roomName == room){

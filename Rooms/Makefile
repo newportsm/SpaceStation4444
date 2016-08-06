@@ -7,7 +7,7 @@ Room.o: Room.hpp Room.cpp
 factories.o: factories.hpp factories.cpp
 	g++ -Wall -std=c++1y -c factories.hpp factories.cpp
 Game.o: Event.o Item.o factories.o Room.o Player.hpp Game.hpp Game.cpp
-	g++ -Wall -std=c++1y -c Game.hpp Game.cpp Player.hpp
+	g++ -Wall -std=c++1y -c Game.hpp Game.cpp Player.hpp 
 testGame: Event.o Item.o factories.o Room.o Game.o main.cpp
 	g++ -Wall -std=c++1y Event.o Item.o Game.o factories.o Room.o main.cpp -o testGame
 cleandepend:

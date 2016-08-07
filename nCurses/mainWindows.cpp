@@ -2,6 +2,8 @@
 #include <ncurses.h>
 #include <unistd.h>
 #include <string>
+#include <menu.h>
+#include <panel.h>
 
 using namespace std;
 

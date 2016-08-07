@@ -71,7 +71,7 @@ int main(){
     
     // draw to our windows
     mvwaddstr(top, 3, 15, TitleScreen);
-    mvwaddstr(middle, 1, 9, HelpMenu);
+    mvwaddstr(middle, 1, 8, HelpMenu);
     //mvwaddstr(bottom, 1, 1, "TEXT INPUT WINDOW");
     
     draw_borders(top);

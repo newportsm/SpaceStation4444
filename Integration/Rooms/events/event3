@@ -1,7 +1,0 @@
-Retracted Ladder
-The ladder to the connection tube is retracted. The emergency protocols must have locked the station down, thinking it was an attack.
-Entrance to Connection Tube
-jump for tube door;lower ladder;build ladder;leave room*
-jump for tube door:"One, two, three!" You shout and throw yourself up -- only to fall, slip, and land on your butt. Maybe there's a better idea.;nothing*
-lower ladder:Smart move! Now you can climb up to the door and then pass through the tube to the other ring!;continue*
-build ladder:Building a ladder with all the debris sounds like a good idea -- until you fall and a piece off a broken chair punctures you skull.;playerdied*

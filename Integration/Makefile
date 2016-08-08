@@ -8,8 +8,11 @@ factories.o: factories.hpp factories.cpp
 	g++ -Wall -std=c++1y -c factories.hpp factories.cpp
 Game.o: Event.o Item.o factories.o Room.o Player.hpp Game.hpp Game.cpp
 	g++ -Wall -std=c++1y -c Game.hpp Game.cpp Player.hpp
-testGame: Event.o Item.o factories.o Room.o Game.o main_integrated_exp.cpp
+testGame: Event.o Item.o factories.o Room.o Game.o main_integrated.cpp
+	g++ -Wall -std=c++1y Event.o Item.o Game.o factories.o Room.o main_integrated.cpp -o testGame -lncurses
+testGameExp: Event.o Item.o factories.o Room.o Game.o main_integrated_exp.cpp
 	g++ -Wall -std=c++1y Event.o Item.o Game.o factories.o Room.o main_integrated_exp.cpp -o testGame -lncurses
+
 cleandepend:
 	rm *.o *.gch
 cleanall:

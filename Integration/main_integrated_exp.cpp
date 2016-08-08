@@ -43,7 +43,7 @@ void draw_borders(WINDOW* screen)
 
 int main(){
     int parent_x, parent_y;
-    int middle_size = 12;
+    int middle_size = 20;
     int bottom_size = 3;
     char TitleScreen[] ="   _____                         _____ _        _   _ \n                 / ____|                       / ____| |      | | (_)         \n                | (___  _ __   __ _  ___ ___  | (___ | |_ __ _| |_ _  ___  _ __ \n                 \\___ \\| '_ \\ / _` |/ __/ _ \\  \\___ \\| __/ _` | __| |/ _ \\| '_ \\ \n                 ____) | |_) | (_| | (_|  __/  ____) | || (_| | |_| | (_) | | | |\n                |_____/| .__/ \\__,_|\\___\\___| |_____/ \\__\\__,_|\\__|_|\\___/|_| |_| \n                       | |       _  _   _  _   _  _   _  _ \n                       |_|      | || | | || | | || | | || |\n                                | || |_| || |_| || |_| || |_ \n                                |__   _|__   _|__   _|__   _|\n                                   | |    | |    | |    | |\n                                   |_|    |_|    |_|    |_|";
     char HelpMenu[] = "Use 'go to [exact room name]' to move to another room. \n  Use 'look' to see what items are in a room and what the connected rooms are. \n  Use 'grab [exact item name]' to pick up an item \n  Use 'quit' to exit. (Will not work when responding to an event). \n  Use 'help' at any point during the game to see these instructions again \n";
@@ -51,8 +51,8 @@ int main(){
     Game game;
     
     initscr();
-    noecho();
-    curs_set(FALSE);
+    //noecho();
+    curs_set(TRUE);
     keypad(stdscr, TRUE);
 
     // get our maximum window dimensions
@@ -60,7 +60,7 @@ int main(){
     
     // preset window settings
     parent_x = 110;
-    parent_y = 30;
+    parent_y = 50;
     
     // set up the initial windows
     WINDOW* top = newwin(parent_y - middle_size, parent_x, 0, 0);
@@ -119,6 +119,8 @@ int main(){
         draw_borders(top);
         draw_borders(middle);
         draw_borders(bottom);
+
+		wmove(bottom, 1,1);
         
        	// refresh each window
         refresh();

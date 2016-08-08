@@ -1,0 +1,7 @@
+Alien attack!
+Oh, no! An face-eating, dirty alien is attacking you, coming from the shadows. You can that it looks like it has a really hard shell. What are you going to do?
+Kitchen
+punch it;flash with flashlight;run away*
+punch it:Oh no! You've made the alien angry! The creature has leapt on your face and is now eating it off. Better luck next time.;playerdied*
+flash with flashlight:Smart move! That scared the alien away! But you'll probably want to be careful as you move around the station...;continue*
+run away:Oh no! You startled the alien! It's leapt on your back and just bit through your spine! Oh, there's blood everywhere! Better luck next time.;playerdied*

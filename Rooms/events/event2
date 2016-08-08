@@ -1,7 +1,7 @@
 Alien attack again!
 An face-eating, dirty alien is attacking you even though with the training room lights on! It's shell looks a bit weaker than the last one... What do?
 Training Room
-punch alien;run away;flash with flashlight*
-punch alien:Smart move! That scared the alien away!;continue*
+punch it;run away;flash with flashlight*
+punch it:Smart move! That scared the alien away!;continue*
 flash with flashlight:Oh no! It wasn't effective! The alien hisses and continues approaching;nothing*
 run away:Oh no! You startled the alien! It's leapt on your back and just bit through your spine! Oh, there's blood everywhere! Better luck next time.;playerdied*

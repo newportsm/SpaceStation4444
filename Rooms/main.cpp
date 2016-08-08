@@ -18,12 +18,19 @@ int main(){
         string input;
 		//game.printCurrentRoom();
         currentRoomStrings res = game.getCurrentRoomStrings();
-        cout << res.roomName << endl;
-        cout << res.roomDescription << endl;
-        cout << res.eventName << endl;
-        cout << res.eventDescription << endl;
+		if(res.activeEvent){
+			cout << res.eventName << endl;
+   			cout << res.eventDescription << endl;
+		} else {
+			cout << res.roomName << endl;
+			cout << res.roomDescription << endl;
+		}
+		cout << endl << endl;
         if(res.activeEvent){ 
-            cout << res.currentOptions->at(0) << endl;
+			for(unsigned int i = 0; i < res.currentOptions->size(); i++){
+            	cout << res.currentOptions->at(i) << ", ";
+			}
+			cout << endl;
             getline(cin, input);
             vector<string> rez = game.respondToEvent(input);
             for(unsigned int i = 0; i < rez.size(); i++)
@@ -32,13 +39,7 @@ int main(){
             getline(cin, input);
             cout << game.processPlayerInput(input) << endl;
         }
-        /*cout << game.processPlayerInput("look");
-
-        cout << game.processPlayerInput("go to Kitchen");
-        cout << game.processPlayerInput("help");
-        cout << endl << endl ;
-        cout << "Press any key to continue or control + c to quit.";
-        cout << endl << endl;*/
+		cout << endl << endl;
 	}
 
 	return 0;

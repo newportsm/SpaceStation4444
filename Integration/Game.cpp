@@ -520,20 +520,22 @@ string Game::roomAlias(string input){
             return "Sleeping Quarters 2";
     }
     if(output.substr(0, 3) == "equ") output = "Equipment Room";
-    if(output.substr(0, 3) == "con") output = "Connection Tube";
-    if(output.substr(0, 3) == "eng") output = "Engine Room";
-    if(output.substr(0, 3) == "tra") output = "Training Room";
-    if(output.substr(0, 3) == "sci") output = "Science Lab";
-    if(output.substr(0, 3) == "sto") output = "Storage Room";
-    if(output.substr(0, 3) == "wea") output = "Weapons Room";
-    if(output.substr(0, 3) == "com") output = "Computer Room";
-    if(output.substr(0, 3) == "loc") output = "Locker Room";
-    if(output.substr(0, 3) == "esc") output = "Escape Pods";
-    if(output.substr(0, 3) == "com") output = "Computer Room";
-    if(output.substr(0, 3) == "obs") output = "Observatory";
-    if(output.substr(0, 3) == "ent") output = "Entrance to Connection Tube";
-	if(output.substr(0, 3) == "clo") output = "clockwise";
-	if(output.substr(0, 3) == "cou") output = "counter-clockwise";
+    else if(output.substr(0, 3) == "con") output = "Connection Tube";
+	else if(output.substr(0, 3) == "eng") output = "Engine Room";
+	else if(output.substr(0, 3) == "tra") output = "Training Room";
+	else if(output.substr(0, 3) == "sci") output = "Science Lab";
+	else if(output.substr(0, 3) == "sto") output = "Storage Room";
+	else if(output.substr(0, 3) == "wea") output = "Weapons Room";
+	else if(output.substr(0, 3) == "com") output = "Computer Room";
+	else if(output.substr(0, 3) == "loc") output = "Locker Room";
+	else if(output.substr(0, 3) == "esc") output = "Escape Pods";
+	else if(output.substr(0, 3) == "com") output = "Computer Room";
+	else if(output.substr(0, 3) == "obs") output = "Observatory";
+	else if(output.substr(0, 3) == "ent") output = "Entrance to Connection Tube";
+	else if(output.substr(0, 3) == "clo") output = "clockwise";
+	else if(output.substr(0, 3) == "cou") output = "counter-clockwise";
+	else output = "nope";
+
     return output;
 }
 
@@ -968,13 +970,16 @@ string Game::processPlayerInput(string input){
 		}
 		location = location.substr(0, location.length() - 1);
 		location = roomAlias(location);
-
-		if(location == "clockwise" && currentRoom->getCurrentRooms()->at(1)->getRoomName() != "0")
-			location = currentRoom->getCurrentRooms()->at(1)->getRoomName();
-		if(location == "counter-clockwise" && currentRoom->getCurrentRooms()->at(0)->getRoomName() != "0")
-			location = currentRoom->getCurrentRooms()->at(0)->getRoomName();
-		
-		return go(location);
+		if(location != "nope"){
+			if(location == "clockwise" && currentRoom->getCurrentRooms()->at(1)->getRoomName() != "0")
+				location = currentRoom->getCurrentRooms()->at(1)->getRoomName();
+			if(location == "counter-clockwise" && currentRoom->getCurrentRooms()->at(0)->getRoomName() != "0")
+				location = currentRoom->getCurrentRooms()->at(0)->getRoomName();
+			
+			return go(location);
+		} else {
+			return "Sorry, I don't understand.";
+		}
 	}
 	return "Sorry, I don't understand.";
 }

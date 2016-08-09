@@ -9,8 +9,36 @@
 using namespace std;
 
 void strToCstr(string input, char * output){
-	for(unsigned int i = 0; i < input.length(); i++){
+	/*for(unsigned int i = 0; i < input.length(); i++){
 		output[i] = input[i];
+	}*/
+	int totalLength = input.length();
+	int inPos = 0;
+	int outPos = 0;
+	int wordCount = 0;
+	int lineCount = 0;
+	int width = 105;
+	while(inPos < totalLength){
+		wordCount = 0;
+		while(input[inPos + wordCount] != ' ' && input[inPos + wordCount] != '\n' && inPos + wordCount < totalLength - 2){
+			wordCount++;
+		}
+		if(input[inPos + wordCount] == '\n'){
+			lineCount = 0;
+		}
+		wordCount++;
+		if(wordCount + lineCount > width){
+			output[outPos] = '\n';
+			outPos++;
+			lineCount = 0;
+		}
+		int curPos = inPos;
+		while(inPos < curPos + wordCount){
+			output[outPos] = input[inPos];
+			outPos++;
+			inPos++;
+			lineCount++;
+		}
 	}
 }
 
@@ -25,7 +53,7 @@ string cstrToStr(char * input){
 
 int main(){
     int parent_x, parent_y;
-    int middle_size = 20;
+    int middle_size = 22;
     int bottom_size = 3;
     char TitleScreen[] ="   _____                         _____ _        _   _ \n                 / ____|                       / ____| |      | | (_)         \n                | (___  _ __   __ _  ___ ___  | (___ | |_ __ _| |_ _  ___  _ __ \n                 \\___ \\| '_ \\ / _` |/ __/ _ \\  \\___ \\| __/ _` | __| |/ _ \\| '_ \\ \n                 ____) | |_) | (_| | (_|  __/  ____) | || (_| | |_| | (_) | | | |\n                |_____/| .__/ \\__,_|\\___\\___| |_____/ \\__\\__,_|\\__|_|\\___/|_| |_| \n                       | |       _  _   _  _   _  _   _  _ \n                       |_|      | || | | || | | || | | || |\n                                | || |_| || |_| || |_| || |_ \n                                |__   _|__   _|__   _|__   _|\n                                   | |    | |    | |    | |\n                                   |_|    |_|    |_|    |_|";
     char HelpMenu[] = "Use 'go [room name]' to move to another room.\nUse 'look' to get full room description.\nUse 'look at [item name]' to get description of something in a room.\nUse 'check' to get a list of all the items you have picked up.\nUse 'check [item name]' to get a description of an item you have picked up.\nUse 'open [item name]' top open something and see what's inside.\nUse 'grab [item name]' to pick up an item.\nUse 'patch [item name] with [item name]' to patch and item.\nUse 'insert [item name] into [item name]' to insert one item into another.\nUse 'install [item name] into [item name]' to install one item in another.\nUse 'fly [item name]' to fly something, like an airplane.\nUse 'hit [item name] with [item name]' to hit one item with another.\nUse 'quit' to exit. (Will not work when responding to an event.\nUse 'help' at any point during the game to see these instructions again.\nType 'START' and hit enter to begin the game.";
@@ -182,7 +210,11 @@ int main(){
 		refresh();
 
 		//Get input from the user!
-		getstr(cInput);
+		do{
+			getstr(cInput);
+			move(48,1);
+			refresh();
+		}while(strlen(cInput) < 2);
 	
 		//Convert cInput to string
        	input = cstrToStr(cInput);

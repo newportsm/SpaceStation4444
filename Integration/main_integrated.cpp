@@ -40,7 +40,7 @@ int main(){
     int bottom_size = 3;
     char TitleScreen[] ="   _____                         _____ _        _   _ \n                 / ____|                       / ____| |      | | (_)         \n                | (___  _ __   __ _  ___ ___  | (___ | |_ __ _| |_ _  ___  _ __ \n                 \\___ \\| '_ \\ / _` |/ __/ _ \\  \\___ \\| __/ _` | __| |/ _ \\| '_ \\ \n                 ____) | |_) | (_| | (_|  __/  ____) | || (_| | |_| | (_) | | | |\n                |_____/| .__/ \\__,_|\\___\\___| |_____/ \\__\\__,_|\\__|_|\\___/|_| |_| \n                       | |       _  _   _  _   _  _   _  _ \n                       |_|      | || | | || | | || | | || |\n                                | || |_| || |_| || |_| || |_ \n                                |__   _|__   _|__   _|__   _|\n                                   | |    | |    | |    | |\n                                   |_|    |_|    |_|    |_|";
     char HelpMenu[] = "Use 'go to [exact room name]' to move to another room. \n  Use 'look' to see what items are in a room and what the connected rooms are. \n  Use 'grab [exact item name]' to pick up an item \n  Use 'quit' to exit. (Will not work when responding to an event). \n  Use 'help' at any point during the game to see these instructions again \n";
-    //const char *RoomInfo = "";
+    const char *RoomInfo = "";
     Game game;
     
     initscr();
@@ -72,19 +72,23 @@ int main(){
     // draw to our windows
     mvwaddstr(top, 3, 15, TitleScreen);
     mvwaddstr(middle, 1, 8, HelpMenu);
-    //mvwaddstr(bottom, 1, 1, "TEXT INPUT WINDOW");
+    mvwaddstr(bottom, 1, 1, "Press 'y' to start game");
     
     draw_borders(top);
     draw_borders(middle);
-    //draw_borders(bottom);
+    draw_borders(bottom);
     
     refresh();
     wrefresh(top);
     wrefresh(middle);
-    //wrefresh(bottom);
+    wrefresh(bottom);
+    
+    //delwin(top);
+    //delwin(middle);
+    //delwin(bottom);
     
 
-	/*while(game.getPlayerStatus()){
+	while(game.getPlayerStatus()){
 		//game.printCurrentRoom();
         currentRoomStrings res = game.getCurrentRoomStrings();
         
@@ -94,13 +98,19 @@ int main(){
         // draw to our windows
         mvwprintw(top, 3, 15, "Graphics/Animation");
         mvwprintw(middle, 1, 1, RoomInfo);
-        mvwprintw(bottom, 1, 1, "TEXT INPUT WINDOW");
+        mvwprintw(bottom, 1, 1, "What would you like to do?");
     
         draw_borders(top);
         draw_borders(middle);
         draw_borders(bottom);
         
-        if(res.activeEvent){ 
+        // refresh each window
+        refresh();
+        wrefresh(top);
+        wrefresh(middle);
+        wrefresh(bottom);
+        
+        /*if(res.activeEvent){ 
             cout << res.currentOptions->at(0) << endl;
             vector<string> rez = game.respondToEvent("flash with flashlight");
             cout << rez[0] << " " << rez[1] << endl;
@@ -112,14 +122,8 @@ int main(){
         cout << endl << endl ;
         cout << "Press any key to continue or control + c to quit.";
         cout << endl << endl;
-        getchar();
-        
-        // refresh each window
-        refresh();
-        wrefresh(top);
-        wrefresh(middle);
-        wrefresh(bottom);
-	}*/
+        getchar();*/
+	}
 
 	return 0;
 }

@@ -1,0 +1,32 @@
+To better handle the passing back and forth of strings between the data functions, engine, and nCurses, I created a struct that holds room info.
+
+struct currentRoomStrings is returned from getCurrentRoomStrings(), and it useful for displaying current room name and description or active event.
+
+My thinking is that you display the struct (for example res), as:
+if res.activeEvent is true, then
+print res.roomName
+print res.eventName
+print res.eventDescription
+print res.currentOptions
+
+To print current options, the best bet is probably to use an iterator. 
+You can use a for loop and ->at(i) if you prefer, though.
+The iterator to use is something like this;
+    vector<string>::const_iterator optIt;
+    optIt = res.currentOptions->begin();
+    for(;optIt != res.currentOptions->end(); ++optIt)
+        cout << (*optIt);
+(I guess you don't use cout for nCurses? Not sure...)
+
+if res.activeEvent is false, then
+print res.roomName
+print res.roomDescription
+print res.eventDescription
+
+(Printing res.eventDescription is not necessary, but it will contain the string "The room seems to be quiet.")
+
+*****************
+
+Depending on whether or not there is an event, you'll handle player input differently.
+If there is an event, pass the player's input as a single string to game.respondToEvent. You'll get a vector of strings back -- the first string is a description of the result and the second is a keyword indicating the result. (I think you probably will only need the first one? Depends on how much is handled by the game object directly. but it will be useful for calling animations, I guess.)
+If there is not an event, pass the string with the user's input into game.processPlayerInput and a single string will be returned with the result.

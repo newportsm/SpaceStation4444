@@ -28,6 +28,7 @@ class Game{
 		Room * currentRoom;
 		bool playerIsAlive;
 		bool spaceSuitIsRepaired;
+		bool spaceSuitIsPatched;
 		bool helmestIsRepaired;
 		bool navigationSystemInstalled;
 		vector<string> currentCommand;
@@ -63,6 +64,8 @@ class Game{
 		string patch(string item1, string item2);
 		string install(string item1, string item2);
 		string fly(string item); 
+		string checkItem(string item);
+		string eventAlias(string input);
 };
 
 

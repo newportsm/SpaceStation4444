@@ -8,7 +8,7 @@ void Room::removeItem(Item * item) {
 	it = items.begin();
 	for(;it < items.end(); ++it){
 		if(*it == item){
-			free (*it);
+			delete ((*it));
 			items.erase(it);
 			break;
 		}
@@ -21,6 +21,7 @@ void Room::removeRoom(Room * room) {
 	it = connectedRooms.begin();
 	for(;it < connectedRooms.end(); ++it){
 		if(*it == room){
+			delete ((*it));
 			connectedRooms.erase(it);
 			break;
 		}
@@ -33,6 +34,7 @@ void Room::removeEvent(Event * event) {
 	it = events.begin();
 	for(;it < events.end(); ++it){
 		if(*it == event){
+			delete ((*it));
 			events.erase(it);
 			break;
 		}

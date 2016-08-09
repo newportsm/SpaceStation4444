@@ -19,6 +19,7 @@ class Player{
 			for(it = items.begin(); it != items.end(); ++it){
 				std::cout << (*it)->getItemName() << std::endl;
 				if(*it == oldItem){
+					delete((*it));
 					items.erase(it);
 					break;
 				}

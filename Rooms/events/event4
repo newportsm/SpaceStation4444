@@ -2,4 +2,4 @@ Flying Through the Tube
 The tube door opens and the vacuum of space sucks the air out around you. Two hundred meters away, you can see the other air lock.
 Connection Tube
 go through tube;leave room*
-go through tube:Using the tape to repair your helmet and suit and then connecting the air with the tube you found in the kitchen, you prepare your protective gear. Taking a deep breath, you fling the door open. "One, two, three!" You shout and throw yourself through the tube.;continue*
+go through tube:"One, two, three!" You shout and throw yourself through the tube.;continue*

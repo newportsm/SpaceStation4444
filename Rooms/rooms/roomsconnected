@@ -12,5 +12,5 @@ Science Lab,Escape Pods,Training Room*
 Escape Pods,Storage Room,Science Lab*
 Storage Room,Weapons Room,Escape Pods*
 Weapons Room,Computer Room,Storage Room*
-Computer Room,Weapons Room,Observatory*
+Computer Room,Observatory,Weapons Room*
 Observatory,0,Computer Room*

@@ -9,19 +9,29 @@ string Game::getRoomStatus(){
 	itemsInRoom = currentRoom->getCurrentItems();
 	
 	vector<Room *>::const_iterator roomIt;
-	result += "You can go to these rooms: ";
+	result += "You can go";
+
+	int count = 0;
+	int skip = 0;
 
 	for(roomIt = connectedRooms->begin(); roomIt != connectedRooms->end(); ++roomIt){
 		if((*roomIt)->getRoomName() != "0"){
-			result += (*roomIt)->getRoomName() + ", ";
+			if(count == 0) 
+				result += " counter-clockwise to " + (*roomIt)->getRoomName(); 
+			if(count == 1 && !skip)
+				result += " or clockwise to " + (*roomIt)->getRoomName();
+			if(count == 1 && skip)
+				result += " clockwise to " + (*roomIt)->getRoomName();
+		} else {
+			skip = true;
 		}
+		count++;
 	}
 
-	result = result.substr(0, result.length() - 2);
-	result += "\n";
+	result += ".\n";
 	
 	vector<Item *>::const_iterator itemIt;
-	result += "You can grab or inspect these items: ";
+	result += "You can grab or look at these items: ";
 	
 	for(itemIt = itemsInRoom->begin(); itemIt != itemsInRoom->end(); ++itemIt){
 		if((*itemIt)->isVisible())
@@ -61,7 +71,7 @@ currentRoomStrings Game::getCurrentRoomStrings(){
 		result.roomDescription += getRoomStatus();
 
         result.eventName = "";
-		result.eventDescription = "The room seems to be quiet.";
+		result.eventDescription = "";
 	}
     return result;
 }
@@ -84,6 +94,7 @@ void Game::inputToVector(string input){
 //and the result text is diplayed. The corresponding result keyword is also checked before
 //calling processEvent
 vector<string> Game::respondToEvent(string input){
+	input = eventAlias(input);
     vector<string>results;
     bool match = false;
     vector<string>::const_iterator optIt;
@@ -122,11 +133,13 @@ vector<string> Game::respondToEvent(string input){
 				}
 			}
 			else if(currentRoom->getFirstActiveEvent()->getEventName() == "Retracted Ladder"){
-				if(input == "turn off gravity"){
+				if(input == "lower ladder"){
 					vector<Item *>::const_iterator itemIt;
 					bool hasKeys = false;
 					for(itemIt = player.getCurrentItems()->begin(); itemIt != player.getCurrentItems()->end(); itemIt++){
 						if((*itemIt)->getItemName() == "captain's keys") hasKeys = true;
+						player.removeItem((*itemIt));
+
 					}
 			        if(!hasKeys){
 						match = true;
@@ -161,7 +174,7 @@ vector<string> Game::respondToEvent(string input){
 			else if(currentRoom->getFirstActiveEvent()->getEventName() == "Flying Through the Tube"){
 				if(input == "go through tube"){
 					vector<Item *>::const_iterator itemIt;
-			        if(spaceSuitIsRepaired && helmestIsRepaired){
+			        if(spaceSuitIsPatched && spaceSuitIsRepaired && helmestIsRepaired){
 						match = true;
 						results = currentRoom->getFirstActiveEvent()->processEvent(input);
 						if(results[1] == "playerdied"){
@@ -249,14 +262,14 @@ string Game::open(string item){
 	}
 	
 	if(result == ""){
-		result = "Can't open " + item + ".";
+		result = "There's nothing inside " + item + ".";
 	}
 	return result;
 }
 
 string Game::fly(string item){
 	string result = "";
-	if(!navigationSystemInstalled)
+	if(item == "escape pod" && !navigationSystemInstalled)
 		return "You need to install the navigation system before you can fly the escape pod.";
 
 	vector<Item *>::const_iterator roomItems;
@@ -271,7 +284,7 @@ string Game::fly(string item){
 	}
 	
 	if(result == ""){
-		result = "Can't fly " + item + ".";
+		result = "What? You can't fly " + item + ".";
 	}
 	return result;
 }
@@ -406,14 +419,21 @@ string Game::drop(string item){
 
 //Displays all the items in the player's items vector
 string Game::checkItemsInHand(){
-	const vector<Item *> * items = player.getCurrentItems();
-	vector<Item *>::const_iterator itemIt;
-    string results = "";
-	results =  "You currently are holding: ";
-	for(itemIt = items->begin(); itemIt != items->end(); ++itemIt){
-		results += (*itemIt)->getItemName() + ", ";
+	if(player.getCurrentItems()->size() > 0){
+		const vector<Item *> * items = player.getCurrentItems();
+		vector<Item *>::const_iterator itemIt;
+		string results = "";
+		results =  "You currently are holding: ";
+		for(itemIt = items->begin(); itemIt != items->end(); ++itemIt){
+			results += (*itemIt)->getItemName() + ", ";
+		}
+
+		results = results.substr(0, results.length() - 2);
+		results += ".";
+		return results;
+	} else {
+		return "You are not currently holding any items.";
 	}
-    return results;
 }
 
 string Game::itemAlias(string input){
@@ -461,10 +481,30 @@ string Game::itemAlias(string input){
 	if(output.substr(0, 3) == "laz") output = "lazer rifle guidebook";
 	if(output.substr(0, 3) == "win") output = "window";
 	if(output.substr(0, 3) == "esc") output = "escape pod";
+	if(output.substr(0, 3) == "tel") output = "telescope";
+	if(output.substr(0, 3) == "deb") output = "debris field chart";
+
 
     return output;
 }
 
+string Game::eventAlias(string input){
+    string output = "";
+    for(unsigned int i = 0; i < input.length(); i++){
+        output += tolower(input[i]);
+    }
+    if(output.substr(0, 3) == "fla") output = "flash with flashlight";
+    if(output.substr(0, 3) == "pun") output = "punch it";
+    if(output.substr(0, 3) == "run") output = "run away";
+    if(output.substr(0, 3) == "lea") output = "leave room";
+    if(output.substr(0, 3) == "go ") output = "go through tube";
+    if(output.substr(0, 3) == "got") output = "go through tube";
+    if(output.substr(0, 3) == "jum") output = "jump for tube door";
+    if(output.substr(0, 3) == "bui") output = "build ladder";
+    if(output.substr(0, 3) == "low") output = "lower ladder";
+
+	return output;
+}
 
 string Game::roomAlias(string input){
     string output = "";
@@ -492,7 +532,8 @@ string Game::roomAlias(string input){
     if(output.substr(0, 3) == "com") output = "Computer Room";
     if(output.substr(0, 3) == "obs") output = "Observatory";
     if(output.substr(0, 3) == "ent") output = "Entrance to Connection Tube";
-
+	if(output.substr(0, 3) == "clo") output = "clockwise";
+	if(output.substr(0, 3) == "cou") output = "counter-clockwise";
     return output;
 }
 
@@ -565,6 +606,20 @@ string Game::insert(string item1, string item2){
 		if(!hasTube) return "Maybe you should try finding a tube first.";
 		player.removeItem((*itemIt2));
 		spaceSuitIsRepaired = true;
+		if(spaceSuitIsPatched && spaceSuitIsRepaired){
+		   	string rep = "Space suit can now be used in space!";
+			vector<Item *>::const_iterator itemIt3;
+			for(itemIt3 = player.getCurrentItems()->begin(); itemIt3 != player.getCurrentItems()->end(); itemIt3++){
+				if((*itemIt3)->getItemName() == "space suit") (*itemIt3)->setItemDescription(rep);
+			}
+		} else {
+		   	string rep = "Your space suit still has holes in it.";
+			vector<Item *>::const_iterator itemIt3;
+			for(itemIt3 = player.getCurrentItems()->begin(); itemIt3 != player.getCurrentItems()->end(); itemIt3++){
+				if((*itemIt3)->getItemName() == "space suit") (*itemIt3)->setItemDescription(rep);
+			}
+		}
+
 		return "You've fixed the space suit!";
 	} 
 	else {
@@ -573,7 +628,6 @@ string Game::insert(string item1, string item2){
 }
 
 string Game::patch(string item1, string item2){
-	cout << item1 << " " << item2 << endl;
 	if(item1 == "helmet" && item2 == "duct tape"){
 		bool hasHelmet = false;
 		bool hasDuctTape = false;
@@ -590,9 +644,46 @@ string Game::patch(string item1, string item2){
 			}
 		}
 		if(!hasDuctTape) return "You don't even have the duct tape yet!";
+		string rep = "Helmet can now be used in space!";
 		helmestIsRepaired = true;
-		player.removeItem((*itemIt2));
+		vector<Item *>::const_iterator itemIt3;
+		for(itemIt3 = player.getCurrentItems()->begin(); itemIt3 != player.getCurrentItems()->end(); itemIt3++){
+			if((*itemIt3)->getItemName() == "helmet") (*itemIt3)->setItemDescription(rep);
+		}
 		return "You have patched your helmet with the duct tape..";
+	} 
+	if(item1 == "space suit" && item2 == "duct tape"){
+		bool hasHelmet = false;
+		bool hasDuctTape = false;
+		vector<Item *>::const_iterator itemIt;
+		for(itemIt = player.getCurrentItems()->begin(); itemIt != player.getCurrentItems()->end(); itemIt++){
+			if((*itemIt)->getItemName() == "space suit") hasHelmet = true;
+		}
+		if(!hasHelmet) return "You should probably try finding the space suit first!";
+		vector<Item *>::const_iterator itemIt2;
+		for(itemIt2 = player.getCurrentItems()->begin(); itemIt2 != player.getCurrentItems()->end(); itemIt2++){
+			if((*itemIt2)->getItemName() == "duct tape"){
+				hasDuctTape = true;
+				break;
+			}
+		}
+		if(!hasDuctTape) return "You don't even have the duct tape yet!";
+		spaceSuitIsPatched = true;
+		if(spaceSuitIsPatched && spaceSuitIsRepaired){
+			string rep = "Space suit can now be used in space!";
+			vector<Item *>::const_iterator itemIt3;
+			for(itemIt3 = player.getCurrentItems()->begin(); itemIt3 != player.getCurrentItems()->end(); itemIt3++){
+				if((*itemIt3)->getItemName() == "space suit") (*itemIt3)->setItemDescription(rep);
+			}
+		} else {
+			string rep = "Your space suit still needs a tube!";
+			player.removeItem((*itemIt2));
+			vector<Item *>::const_iterator itemIt3;
+			for(itemIt3 = player.getCurrentItems()->begin(); itemIt3 != player.getCurrentItems()->end(); itemIt3++){
+				if((*itemIt3)->getItemName() == "space suit") (*itemIt3)->setItemDescription(rep);
+			}
+		}
+		return "You have patched your space suit with the duct tape.";
 	} else {
 		return "Well, that was a nice try, but it didn't do anything.";
 	}
@@ -623,6 +714,16 @@ string Game::hit(string item1, string item2){
 	}
 }
 
+string Game::checkItem(string item){
+	vector<Item *>::const_iterator itemIt;
+	for(itemIt = player.getCurrentItems()->begin(); itemIt != player.getCurrentItems()->end(); itemIt++){
+		if(item == (*itemIt)->getItemName()){
+			return (*itemIt)->getItemDescription();
+		}
+	}
+	return "Sorry, you currently do not have that item.";
+}
+
 //Uses currentCommand calls appropriate function matching command
 string Game::processPlayerInput(string input){
 
@@ -636,10 +737,14 @@ string Game::processPlayerInput(string input){
 			}
 			location = location.substr(0, location.length() - 1);
 			location = roomAlias(location);
+			if(location == "clockwise" && currentRoom->getCurrentRooms()->at(1)->getRoomName() != "0")
+				location = currentRoom->getCurrentRooms()->at(1)->getRoomName();
+			if(location == "counter-clockwise" && currentRoom->getCurrentRooms()->at(0)->getRoomName() != "0")
+				location = currentRoom->getCurrentRooms()->at(0)->getRoomName();
 			return go(location);
 		}
-	} else if (currentCommand[0] == "go"){
-		return "Where do you want to go?";
+		else
+			return "Where do you want to go?";
 	}
 	else if(currentCommand[0] == "look"){
 	   	if(currentCommand.size() > 1){
@@ -681,7 +786,17 @@ string Game::processPlayerInput(string input){
 		}
 	}
 	else if(currentCommand[0] == "check"){
-		return checkItemsInHand();
+		if(currentCommand.size() < 2)
+			return checkItemsInHand();
+		else {
+			string item = "";
+			for(unsigned int i = 1; i < currentCommand.size(); i++){
+				item += currentCommand[i] + " ";
+			}
+			item = item.substr(0, item.length() - 1);
+			item = itemAlias(item);
+			return checkItem(item);
+		}
 	}
 	else if(currentCommand[0] == "eat"){
 		if(currentCommand.size() > 0){
@@ -826,9 +941,18 @@ string Game::processPlayerInput(string input){
 		}
 	}
 	else if(currentCommand[0] == "help") {
-		string instructions = "Use 'go to [exact room name]' to move to another room.\n"; 
-		instructions += "Use 'look' to see what items are in a room and what the connected rooms are.\n"; 
-		instructions += "Use 'grab [exact item name]' to pick up an item.\n";
+		string instructions = "Use 'go [room name]' to move to another room.\n"; 
+		instructions += "Use 'look' to get full room description.\n";
+		instructions += "Use 'look at [item name]' to get description of something in a room.\n"; 
+		instructions += "Use 'check' to get a list of all the items you have picked up.\n"; 
+		instructions += "Use 'check [item name]' to get a description of an item you have picked up.\n";	
+		instructions += "Use 'open [item name]' top open something and see what's inside.\n";
+		instructions += "Use 'grab [item name]' to pick up an item.\n";
+		instructions += "Use 'patch [item name] with [item name]' to patch and item.\n";
+		instructions += "Use 'insert [item name] into [item name]' to insert one item into another.\n";
+		instructions += "Use 'install [item name] into [item name]' to install one item in another.\n";
+		instructions += "Use 'fly [item name]' to fly something, like an airplane.\n";
+		instructions += "Use 'hit [item name] with [item name]' to hit one item with another.\n";
 		instructions += "Use 'quit' to exit. (Will not work when responding to an event.\n";
 		instructions += "Use 'help' at any point during the game to see these instructions again.\n"; 
 		return instructions;
@@ -836,6 +960,21 @@ string Game::processPlayerInput(string input){
 	else if(currentCommand[0] == "quit"){
         playerHasDied();
 		return "Good-bye!"; 
+	}
+	else {
+		string location = "";
+		for(unsigned int i = 0; i < currentCommand.size(); i++){
+			location += currentCommand[i] + " ";
+		}
+		location = location.substr(0, location.length() - 1);
+		location = roomAlias(location);
+
+		if(location == "clockwise" && currentRoom->getCurrentRooms()->at(1)->getRoomName() != "0")
+			location = currentRoom->getCurrentRooms()->at(1)->getRoomName();
+		if(location == "counter-clockwise" && currentRoom->getCurrentRooms()->at(0)->getRoomName() != "0")
+			location = currentRoom->getCurrentRooms()->at(0)->getRoomName();
+		
+		return go(location);
 	}
 	return "Sorry, I don't understand.";
 }

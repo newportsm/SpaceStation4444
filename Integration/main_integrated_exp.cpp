@@ -171,6 +171,7 @@ int main(){
 		//If we have moved to a new room, display it.
 		//Otherwise, skip to getting input from user.	
 		if(curRoom != res.roomName){
+			werase(middle);
    
 			// draw to our windows
 			mvwprintw(top, 3, 15, TitleScreen);

@@ -363,7 +363,7 @@ string Game::grab(string item){
 				vector<Item *>::const_iterator removeIt;
 				for(removeIt = itemsInRoom->begin(); removeIt != itemsInRoom->end(); removeIt++){
 					if((*removeIt)->getHeldItem() != NULL){
-						cout << (*removeIt)->getHeldItem()->getItemName() << endl;
+						//cout << (*removeIt)->getHeldItem()->getItemName() << endl;
 						if((*removeIt)->getHeldItem()->getItemName() == item){
 							(*removeIt)->removeHeldItem();
 						}

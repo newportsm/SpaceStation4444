@@ -135,14 +135,7 @@ int main(){
 
 
 	while(game.getPlayerStatus()){
-       	// refresh each window
-        refresh();
-        werase(middle);
-        wrefresh(middle);
-		werase(bottom);
-        wrefresh(bottom);
-
-
+   
 	 	//This gets the "strings" (room name, event name, descriptions, etc.)
 		//from the current room.
 		//The starting room is set as the brdige when the game loads.
@@ -222,18 +215,19 @@ int main(){
 			result = game.processPlayerInput(input);
 		}
 
-		//We'll reuse RoomInfo here and convert the result
-		//to a c-string which goes into RoomInfo.
-		memset(RoomInfo, '\0', 3000);
-		strToCstr(result, RoomInfo);
-        
-       	// refresh each window
+		// refresh each window
         refresh();
         werase(middle);
         wrefresh(middle);
 		werase(bottom);
         wrefresh(bottom);
 
+
+		//We'll reuse RoomInfo here and convert the result
+		//to a c-string which goes into RoomInfo.
+		memset(RoomInfo, '\0', 3000);
+		strToCstr(result, RoomInfo);
+        
 		// draw to our windows
         mvwprintw(top, 3, 15, TitleScreen);
         mvwprintw(middle, 1, 1, RoomInfo);

@@ -90,11 +90,14 @@ int main(){
     wrefresh(middle);
     //wrefresh(bottom);
     
+	string curRoom = "";
+
+	char RoomInfo[3000];
 
 	while(game.getPlayerStatus()){
-		//game.printCurrentRoom();
-        currentRoomStrings res = game.getCurrentRoomStrings();
         
+		currentRoomStrings res = game.getCurrentRoomStrings();
+    
         string RoomInfoStr; 
         
 		if(res.activeEvent){
@@ -107,28 +110,39 @@ int main(){
 			RoomInfoStr = res.roomName + "\n" + res.roomDescription;
 		}
 
-		char RoomInfo[3000];
+		memset(RoomInfo, '\0', 3000);
 
+		char lengC[10];
 		strToCstr(RoomInfoStr, RoomInfo);
-        
-        // draw to our windows
-        mvwprintw(top, 3, 15, "Graphics/Animation");
-        mvwprintw(middle, 1, 1, RoomInfo);
-        mvwprintw(bottom, 1, 1, "TEXT INPUT WINDOW");
-    
-        draw_borders(top);
-        draw_borders(middle);
-        draw_borders(bottom);
+		string leng = to_string(strlen(RoomInfo));
+		strToCstr(leng, lengC);
 
-		wmove(bottom, 1,1);
-        
-       	// refresh each window
-        refresh();
-        wrefresh(top);
-        wrefresh(middle);
-        wrefresh(bottom);
+		if(curRoom != res.roomName){
+   
+			// draw to our windows
+			mvwprintw(top, 3, 15, TitleScreen);
+			mvwprintw(middle, 1, 1, RoomInfo);
+			mvwprintw(bottom, 1, 1, lengC);
+		
+			draw_borders(top);
+			draw_borders(middle);
+			draw_borders(bottom);
+
+						
+			// refresh each window
+			refresh();
+			wrefresh(top);
+			wrefresh(middle);
+			wrefresh(bottom);
+
+			curRoom = res.roomName;
+		}
 
 		char cInput[1000];
+		memset(cInput, '\0', 1000);
+
+		move(48,1);
+		refresh();
 
 		getstr(cInput);
 		
@@ -146,15 +160,25 @@ int main(){
 			result = game.processPlayerInput(input);
 		}
 
-		char resultC[3000];
+		//char resultC[3000];
+		memset(RoomInfo, '\0', 3000);
 
-		strToCstr(result, resultC);
+		strToCstr(result, RoomInfo);
+
+        mvwprintw(middle, 1, 1, " ");
+
+        draw_borders(middle);
+        
+       	// refresh each window
+        refresh();
+        wrefresh(middle);
+
 
 		// draw to our windows
-        mvwprintw(top, 3, 15, "Graphics/Animation");
-        mvwprintw(middle, 1, 1, resultC);
-        mvwprintw(bottom, 1, 1, "TEXT INPUT WINDOW");
-    
+        mvwprintw(top, 3, 15, TitleScreen);
+        mvwprintw(middle, 1, 1, RoomInfo);
+        mvwprintw(bottom, 1, 1, "");
+
         draw_borders(top);
         draw_borders(middle);
         draw_borders(bottom);

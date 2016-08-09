@@ -90,7 +90,7 @@ int main(){
         wrefresh(bottom);
 
 		mvwaddstr(bottom, 1, 1, " ");
-		// box(bottom, 0, 0);
+		box(bottomborder, 0, 0);
 		wrefresh(bottom);
 		move(48, 1);
 		refresh();
@@ -217,7 +217,7 @@ int main(){
 
 		box(topborder, 0, 0);
 		box(middleborder, 0, 0);
-		box(bottom, 0, 0);
+		box(bottomborder, 0, 0);
         
        	// refresh each window
         refresh();

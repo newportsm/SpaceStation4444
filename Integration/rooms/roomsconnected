@@ -12,9 +12,5 @@ Science Lab,Escape Pods,Training Room*
 Escape Pods,Storage Room,Science Lab*
 Storage Room,Weapons Room,Escape Pods*
 Weapons Room,Computer Room,Storage Room*
-<<<<<<< HEAD
-Computer Room,Weapons Room,Observatory*
-=======
 Computer Room,Observatory,Weapons Room*
->>>>>>> 4d07d1917f823d8ea5c2f802b528173147c8ee26
 Observatory,0,Computer Room*

@@ -23,33 +23,6 @@ string cstrToStr(char * input){
 	return output;
 }
 
-// void draw_borders(WINDOW* screen)
-// {
-//     int x, y, i;
-
-//     getmaxyx(screen, y, x);
-
-//     // the 4 corners
-//     mvwprintw(screen, 0, 0, "*");
-//     mvwprintw(screen, y - 1, 0, "*");
-//     mvwprintw(screen, 0, x - 1, "*");
-//     mvwprintw(screen, y - 1, x - 1, "*");
-
-//     // sides of the borders
-//     for (i = 1; i < (y - 1); i++)
-//     {
-//         mvwprintw(screen, i, 0, "|");
-//         mvwprintw(screen, i, x - 1, "|");
-//     }
-
-//     // top and bottom
-//     for (i = 1; i < (x - 1); i++)
-//     {
-//         mvwprintw(screen, 0, i, "*");
-//         mvwprintw(screen, y - 1, i, "*");
-//     }
-// }
-
 int main(){
     int parent_x, parent_y;
     int middle_size = 20;
@@ -72,9 +45,12 @@ int main(){
     parent_y = 50;
     
     // set up the initial windows
-    WINDOW* top = newwin(parent_y - middle_size, parent_x, 0, 0);
-    WINDOW* middle = newwin(middle_size - bottom_size, parent_x, parent_y - middle_size, 0);
-    WINDOW* bottom = newwin(bottom_size, parent_x, parent_y - bottom_size, 0);
+    WINDOW* topborder = newwin(parent_y - middle_size, parent_x, 0, 0);
+    WINDOW* top = newwin(parent_y - middle_size - 2, parent_x - 2, 1, 1);
+    WINDOW* middleborder = newwin(middle_size - bottom_size, parent_x, parent_y - middle_size, 0);
+    WINDOW* middle = newwin(middle_size - bottom_size - 2, parent_x - 2, parent_y - middle_size + 1, 1);
+    WINDOW* bottomborder = newwin(bottom_size, parent_x, parent_y - bottom_size, 0);
+    WINDOW* bottom = newwin(bottom_size - 2, parent_x - 2, parent_y - bottom_size + 1, 1);
 
     // initalize color
     start_color();
@@ -90,13 +66,16 @@ int main(){
     mvwaddstr(middle, 1, 8, HelpMenu);
     mvwaddstr(bottom, 1, 1, " ");
     
-	box(top, 0, 0);
-	box(middle, 0, 0);
-	box(bottom, 0, 0);
+	box(topborder, 0, 0);
+	box(middleborder, 0, 0);
+	box(bottomborder, 0, 0);
     
     refresh();
+    wrefresh(topborder);
     wrefresh(top);
+    wrefresh(middleborder);
     wrefresh(middle);
+    wrefresh(bottomborder);
     wrefresh(bottom);
 
    	//String and c-string used to get input!	
@@ -111,7 +90,7 @@ int main(){
         wrefresh(bottom);
 
 		mvwaddstr(bottom, 1, 1, " ");
-		box(bottom, 0, 0);
+		// box(bottom, 0, 0);
 		wrefresh(bottom);
 		move(48, 1);
 		refresh();
@@ -171,6 +150,7 @@ int main(){
 		//If we have moved to a new room, display it.
 		//Otherwise, skip to getting input from user.	
 		if(curRoom != res.roomName){
+			werase(stdscr); 
 			werase(middle);
    
 			// draw to our windows
@@ -178,15 +158,17 @@ int main(){
 			mvwprintw(middle, 1, 1, RoomInfo);
 			mvwprintw(bottom, 1, 1, "");
 		
-			box(top, 0, 0);
-			box(middle, 0, 0);
-			box(bottom, 0, 0);
-
-						
+			box(topborder, 0, 0);
+			box(middleborder, 0, 0);
+			box(bottomborder, 0, 0);
+					
 			// refresh each window
 			refresh();
+			wrefresh(topborder);
 			wrefresh(top);
+			wrefresh(middleborder);
 			wrefresh(middle);
+			wrefresh(bottomborder);
 			wrefresh(bottom);
 
 			curRoom = res.roomName;
@@ -223,7 +205,6 @@ int main(){
 		werase(bottom);
         wrefresh(bottom);
 
-
 		//We'll reuse RoomInfo here and convert the result
 		//to a c-string which goes into RoomInfo.
 		memset(RoomInfo, '\0', 3000);
@@ -234,14 +215,17 @@ int main(){
         mvwprintw(middle, 1, 1, RoomInfo);
         mvwprintw(bottom, 1, 1, "");
 
-		box(top, 0, 0);
-		box(middle, 0, 0);
+		box(topborder, 0, 0);
+		box(middleborder, 0, 0);
 		box(bottom, 0, 0);
         
        	// refresh each window
         refresh();
+        wrefresh(topborder);
         wrefresh(top);
+        wrefresh(middleborder);
         wrefresh(middle);
+        wrefresh(bottomborder);
         wrefresh(bottom);
 	}
 

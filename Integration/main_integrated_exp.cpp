@@ -171,6 +171,7 @@ int main(){
         
        	// refresh each window
         refresh();
+        werase(middle);
         wrefresh(middle);
 
 

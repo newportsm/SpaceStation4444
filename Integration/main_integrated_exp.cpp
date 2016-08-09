@@ -23,32 +23,32 @@ string cstrToStr(char * input){
 	return output;
 }
 
-void draw_borders(WINDOW* screen)
-{
-    int x, y, i;
+// void draw_borders(WINDOW* screen)
+// {
+//     int x, y, i;
 
-    getmaxyx(screen, y, x);
+//     getmaxyx(screen, y, x);
 
-    // the 4 corners
-    mvwprintw(screen, 0, 0, "*");
-    mvwprintw(screen, y - 1, 0, "*");
-    mvwprintw(screen, 0, x - 1, "*");
-    mvwprintw(screen, y - 1, x - 1, "*");
+//     // the 4 corners
+//     mvwprintw(screen, 0, 0, "*");
+//     mvwprintw(screen, y - 1, 0, "*");
+//     mvwprintw(screen, 0, x - 1, "*");
+//     mvwprintw(screen, y - 1, x - 1, "*");
 
-    // sides of the borders
-    for (i = 1; i < (y - 1); i++)
-    {
-        mvwprintw(screen, i, 0, "|");
-        mvwprintw(screen, i, x - 1, "|");
-    }
+//     // sides of the borders
+//     for (i = 1; i < (y - 1); i++)
+//     {
+//         mvwprintw(screen, i, 0, "|");
+//         mvwprintw(screen, i, x - 1, "|");
+//     }
 
-    // top and bottom
-    for (i = 1; i < (x - 1); i++)
-    {
-        mvwprintw(screen, 0, i, "*");
-        mvwprintw(screen, y - 1, i, "*");
-    }
-}
+//     // top and bottom
+//     for (i = 1; i < (x - 1); i++)
+//     {
+//         mvwprintw(screen, 0, i, "*");
+//         mvwprintw(screen, y - 1, i, "*");
+//     }
+// }
 
 int main(){
     int parent_x, parent_y;
@@ -90,9 +90,9 @@ int main(){
     mvwaddstr(middle, 1, 8, HelpMenu);
     mvwaddstr(bottom, 1, 1, " ");
     
-    draw_borders(top);
-    draw_borders(middle);
-    draw_borders(bottom);
+	box(top, 0, 0);
+	box(middle, 0, 0);
+	box(bottom, 0, 0);
     
     refresh();
     wrefresh(top);
@@ -111,7 +111,7 @@ int main(){
         wrefresh(bottom);
 
 		mvwaddstr(bottom, 1, 1, " ");
-		draw_borders(bottom);
+		box(bottom, 0, 0);
 		wrefresh(bottom);
 		move(48, 1);
 		refresh();
@@ -178,9 +178,9 @@ int main(){
 			mvwprintw(middle, 1, 1, RoomInfo);
 			mvwprintw(bottom, 1, 1, "");
 		
-			draw_borders(top);
-			draw_borders(middle);
-			draw_borders(bottom);
+			box(top, 0, 0);
+			box(middle, 0, 0);
+			box(bottom, 0, 0);
 
 						
 			// refresh each window
@@ -234,9 +234,9 @@ int main(){
         mvwprintw(middle, 1, 1, RoomInfo);
         mvwprintw(bottom, 1, 1, "");
 
-        draw_borders(top);
-        draw_borders(middle);
-        draw_borders(bottom);
+		box(top, 0, 0);
+		box(middle, 0, 0);
+		box(bottom, 0, 0);
         
        	// refresh each window
         refresh();

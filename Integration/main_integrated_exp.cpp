@@ -57,6 +57,7 @@ int main(){
     int bottom_size = 3;
     char TitleScreen[] ="   _____                         _____ _        _   _ \n                 / ____|                       / ____| |      | | (_)         \n                | (___  _ __   __ _  ___ ___  | (___ | |_ __ _| |_ _  ___  _ __ \n                 \\___ \\| '_ \\ / _` |/ __/ _ \\  \\___ \\| __/ _` | __| |/ _ \\| '_ \\ \n                 ____) | |_) | (_| | (_|  __/  ____) | || (_| | |_| | (_) | | | |\n                |_____/| .__/ \\__,_|\\___\\___| |_____/ \\__\\__,_|\\__|_|\\___/|_| |_| \n                       | |       _  _   _  _   _  _   _  _ \n                       |_|      | || | | || | | || | | || |\n                                | || |_| || |_| || |_| || |_ \n                                |__   _|__   _|__   _|__   _|\n                                   | |    | |    | |    | |\n                                   |_|    |_|    |_|    |_|";
     char HelpMenu[] = "HELP MENU - COMMANDS\nUse 'go [room name]' to move to another room.\nUse 'look' to get full room description.\nUse 'look at [item name]' to get description of something in a room.\nUse 'check' to get a list of all the items you have picked up.\nUse 'check [item name]' to get a description of an item you have picked up.\nUse 'open [item name]' top open something and see what's inside.\nUse 'grab [item name]' to pick up an item.\nUse 'patch [item name] with [item name]' to patch and item.\nUse 'insert [item name] into [item name]' to insert one item into another.\nUse 'install [item name] into [item name]' to install one item in another.\nUse 'fly [item name]' to fly something, like an airplane.\nUse 'hit [item name] with [item name]' to hit one item with another.\nUse 'quit' to exit. (Will not work when responding to an event.\nUse 'help' at any point during the game to see these instructions again.\nType 'START' and hit enter to begin the game.";
+	char Introduction[] = "Space Station 4444 is the last line of defense for the Planet Hobbly Knees, a planet rich in\n untamed resources and a warning to chartographers everywhere not to let their kids get involved \nin the naming process. You've been serving on this station for the better part of a year -- not\n quite a newbie yet not quite a regular. Nevertheless, you've bonded well with the other crew and \nthe captain has proven to be strict by understanding.\n\nIt's the afternoon watch, and you're alone on the bridge -- the rest of the crew are either in \nthe rest of the crew is either in the training room or in the science lab. You're relaxing in the\ncaptain's chair on the bridge, spinning a pen in your hand daydreaming about sipping exotic cocktails\n on a beach when the proximity sensors begin blaring. Before you even have time to sit up, the wall \nabove you explodes and the furious screech of air being sucked into space deafens you.\n\nEverything goes black... \nPress a key to continue...";
 	//const char *RoomInfo = "";
     Game game;
     
@@ -132,9 +133,14 @@ int main(){
 
 	clear();
 	refresh();
-
-	addstr("Space Station 4444 is the last line of defense for the Planet Hobbly Knees, a planet rich in\n untamed resources and a warning to chartographers everywhere not to let their kids get involved \nin the naming process. You've been serving on this station for the better part of a year -- not\n quite a newbie yet not quite a regular. Nevertheless, you've bonded well with the other crew and \nthe captain has proven to be strict by understanding.\n\nIt's the afternoon watch, and you're alone on the bridge -- the rest of the crew are either in \nthe rest of the crew is either in the training room or in the science lab. You're relaxing in the\ncaptain's chair on the bridge, spinning a pen in your hand daydreaming about sipping exotic cocktails\n on a beach when the proximity sensors begin blaring. Before you even have time to sit up, the wall \nabove you explodes and the furious screech of air being sucked into space deafens you.\n\nEverything goes black... \nPress a key to continue...");
+	
+	// introduction window message
+	box(topborder, 0, 0);
+	mvwprintw(top, 5, 1, Introduction);
 	refresh();
+	wrefresh(topborder);
+	wrefresh(top);
+	
 	getchar();
 
 	clear();
@@ -182,7 +188,7 @@ int main(){
 			werase(middle);
    
 			// draw to our windows
-			mvwprintw(top, 3, 15, TitleScreen);
+			mvwprintw(top, 8, 15, TitleScreen);
 			mvwprintw(middle, 1, 1, RoomInfo);
 			mvwprintw(bottom, 1, 1, "");
 		

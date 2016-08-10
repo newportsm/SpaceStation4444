@@ -133,8 +133,8 @@ int main(){
 	clear();
 	refresh();
 
-	cout << "Space Station 4444 is the last line of defense for the Planet Hobbly Knees, a planet rich in untamed resources and a warning to chartographers everywhere not to let their kids get involved in the naming process. You've been serving on this station for the better part of a year -- not quite a newbie yet not quite a regular. Nevertheless, you've bonded well with the other crew and the captain has proven to be strict by understanding.\n\nIt's the afternoon watch, and you're alone on the bridge -- the rest of the crew are either in the rest of the crew is either in the training room or in the science lab. You're relaxing in the captain's chair on the bridge, spinning a pen in your hand daydreaming about sipping exotic cocktails on a beach when the proximity sensors begin blaring. Before you even have time to sit up, the wall above you explodes and the furious screech of air being sucked into space deafens you.\n\nEverything goes black... \nPress a key to continue...";
-
+	addstr("Space Station 4444 is the last line of defense for the Planet Hobbly Knees, a planet rich in\n untamed resources and a warning to chartographers everywhere not to let their kids get involved \nin the naming process. You've been serving on this station for the better part of a year -- not\n quite a newbie yet not quite a regular. Nevertheless, you've bonded well with the other crew and \nthe captain has proven to be strict by understanding.\n\nIt's the afternoon watch, and you're alone on the bridge -- the rest of the crew are either in \nthe rest of the crew is either in the training room or in the science lab. You're relaxing in the\ncaptain's chair on the bridge, spinning a pen in your hand daydreaming about sipping exotic cocktails\n on a beach when the proximity sensors begin blaring. Before you even have time to sit up, the wall \nabove you explodes and the furious screech of air being sucked into space deafens you.\n\nEverything goes black... \nPress a key to continue...");
+	refresh();
 	getchar();
 
 	clear();

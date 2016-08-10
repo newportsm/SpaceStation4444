@@ -90,8 +90,8 @@ int main(){
     wbkgd(bottom, COLOR_PAIR(1));
     
     // draw to our windows
-    mvwaddstr(top, 3, 15, TitleScreen);
-    mvwaddstr(middle, 1, 1, HelpMenu);
+    mvwaddstr(top, 8, 15, TitleScreen);
+    mvwaddstr(middle, 0, 0, HelpMenu);
     mvwaddstr(bottom, 1, 1, " ");
     
 	box(topborder, 0, 0);

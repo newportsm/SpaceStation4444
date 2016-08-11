@@ -2,4 +2,4 @@ Flying Through the Tube
 The tube door opens and the vacuum of space sucks the air out around you. Two hundred meters away, you can see the other air lock.
 Connection Tube
 go through tube;leave room*
-go through tube:"One, two, three!" You shout and throw yourself through the tube.;continue*
+go through tube:"One, two, three!" You shout and throw yourself through the tube. Brushing the cloud of metal flakes out of your way, you slam against the far side of the tube. The tube door flies open and you find yourself in the airlock on the far side.;continue*

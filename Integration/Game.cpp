@@ -99,7 +99,6 @@ vector<string> Game::respondToEvent(string input){
     bool match = false;
     vector<string>::const_iterator optIt;
     const vector<string> * currentOptions = currentRoom->getFirstActiveEvent()->getEventOptions();
-    
     for(optIt = currentOptions->begin(); optIt != currentOptions->end(); ++optIt){
         if(input == (*optIt)){
 			if(currentRoom->getFirstActiveEvent()->getEventName() == "Alien attack!"){
@@ -132,20 +131,58 @@ vector<string> Game::respondToEvent(string input){
 					}
 				}
 			}
+			else if(currentRoom->getFirstActiveEvent()->getEventName() == "Sleeping alien!"){
+				if(input == "burn it"){
+					vector<Item *>::const_iterator itemIt;
+					bool hasFlamethrower = false;
+					for(itemIt = player.getCurrentItems()->begin(); itemIt != player.getCurrentItems()->end(); itemIt++){
+						if((*itemIt)->getItemName() == "flamethrower") hasFlamethrower = true;
+					}
+			        if(!hasFlamethrower){
+						match = true;
+						results.push_back( "You don't have anything to burn it with!"  );
+						results.push_back( "nothing" );
+					} else {
+						match = true;
+						results.push_back( "\"Hey, punk, do you feel lucky?!\" you shout at the alien as you pull the trigger on the flamethrower. Screeching, the giant creature scampers away.");
+						results.push_back("continue");
+						currentRoom->getFirstActiveEvent()->changeStatus();
+					}
+				} else if (input == "run away"){
+					match = true;
+					results = currentRoom->getFirstActiveEvent()->processEvent(input);
+					vector<Room *>::const_iterator roomIt;
+					for(roomIt = rooms.begin(); roomIt != rooms.end(); roomIt++){
+						if((*roomIt)->getRoomName() == "Storage Room"){
+							currentRoom = (*roomIt);
+						}
+					}
+				} else {
+					match = true;
+					results = currentRoom->getFirstActiveEvent()->processEvent(input);
+					if(results[1] == "playerdied"){
+						playerHasDied();
+					} else if(results[1] == "continue"){
+						currentRoom->getFirstActiveEvent()->changeStatus();
+					}
+				}
+			}
 			else if(currentRoom->getFirstActiveEvent()->getEventName() == "Retracted Ladder"){
 				if(input == "lower ladder"){
 					vector<Item *>::const_iterator itemIt;
 					bool hasKeys = false;
 					for(itemIt = player.getCurrentItems()->begin(); itemIt != player.getCurrentItems()->end(); itemIt++){
-						if((*itemIt)->getItemName() == "captain's keys") hasKeys = true;
-						player.removeItem((*itemIt));
-
+						if((*itemIt)->getItemName() == "captain's keys"){
+							hasKeys = true;
+							break;
+						}
 					}
 			        if(!hasKeys){
 						match = true;
 						results.push_back( "You need the captain's keys to do that."  );
 						results.push_back( "nothing" );
 					} else {
+						player.removeItem((*itemIt));
 						match = true;
 						results = currentRoom->getFirstActiveEvent()->processEvent(input);
 						if(results[1] == "playerdied"){
@@ -211,7 +248,6 @@ vector<string> Game::respondToEvent(string input){
 					results.push_back("nothing");
 				}
 			}
-
 			else {
 				match = true;
 				results = currentRoom->getFirstActiveEvent()->processEvent(input);
@@ -224,7 +260,13 @@ vector<string> Game::respondToEvent(string input){
         }
     }
     if(!match){
-        results.push_back( "Sorry, I don't understand: " + input );
+		string error = "Sorry, I don't understand: " + input + "\nEvent options: ";
+		vector<string>::const_iterator opts;
+		for(opts = currentRoom->getFirstActiveEvent()->getEventOptions()->begin(); opts != currentRoom->getFirstActiveEvent()->getEventOptions()->end(); opts++){
+			error = error + (*opts) + ", ";
+		}
+		error = error.substr(0, error.length() - 2);
+        results.push_back( error );
 		results.push_back( "nothing" );
     }
     return results;
@@ -244,7 +286,16 @@ string Game::go(string location){
 			}
 		}
 	}
-    return "Sorry, that room cannot be reached from here.";
+	string error = "Sorry, that room cannot be reached from here.\nRooms you can reach: ";
+	vector<Room *>::const_iterator roomOpts;
+	for(roomOpts = currentRoom->getCurrentRooms()->begin(); roomOpts != currentRoom->getCurrentRooms()->end(); roomOpts++){
+		if((*roomOpts)->getRoomName() != "0")
+			error = error + (*roomOpts)->getRoomName() + ", ";
+	}
+
+	error = error.substr(0, error.length() - 2);
+
+	return error;
 }
 
 string Game::open(string item){
@@ -253,7 +304,22 @@ string Game::open(string item){
 	vector<Item *>::const_iterator roomItems;
 	
 	for(roomItems = currentRoom->getCurrentItems()->begin(); roomItems != currentRoom->getCurrentItems()->end(); roomItems++){
-		if((*roomItems)->getItemName() == item){
+		if((*roomItems)->getItemName() == "weapons locker"){		
+			const vector<Item *> * items = player.getCurrentItems();
+			vector<Item *>::const_iterator itemIt;
+			string results = "";
+			for(itemIt = items->begin(); itemIt != items->end(); ++itemIt){
+				if((*itemIt)->getItemName() == "wire"){
+					(*roomItems)->getHeldItem()->makeVisible();
+					result = "The " + item + " contains a " + (*roomItems)->getHeldItem()->getItemName() + ", which is now visible. Unfortunately, all of the other weapons are lacking battery power.";
+					(*roomItems)->setItemDescription("You've taken the only weapon worth taking already!");
+				}
+			}
+			if(result == ""){
+				result = "You'll need to find something to pick the lock with before you can open this.";
+			}
+		}
+		else if((*roomItems)->getItemName() == item){
 			if((*roomItems)->getHeldItem() != NULL){
 				result = "The " + item + " contains a " + (*roomItems)->getHeldItem()->getItemName() + ", which is now visible.";
 				(*roomItems)->getHeldItem()->makeVisible();
@@ -306,44 +372,11 @@ string Game::lookAt(string item){
 //the connected rooms
 string Game::look(){
 	string result = "";
-	result =  currentRoom->getLongDescription();
+	result = currentRoom->getRoomName() + "\n";
+	result +=  currentRoom->getLongDescription();
 	result += getRoomStatus();
 
 	return result;
-
-
-	/*
-    string result = "";
-	
-	const vector<Room *> * connectedRooms;
-	connectedRooms = currentRoom->getCurrentRooms();
-	
-	const vector<Item *> * itemsInRoom;
-	itemsInRoom = currentRoom->getCurrentItems();
-	
-	vector<Room *>::const_iterator roomIt;
-	result += "You can go to these rooms: ";
-
-	for(roomIt = connectedRooms->begin(); roomIt != connectedRooms->end(); ++roomIt){
-		if((*roomIt)->getRoomName() != "0"){
-			result += (*roomIt)->getRoomName() + ", ";
-		}
-	}
-
-	result = result.substr(0, result.length() - 2);
-	result += "\n";
-	
-	vector<Item *>::const_iterator itemIt;
-	result += "You can grab or inspect these items: ";
-	
-	for(itemIt = itemsInRoom->begin(); itemIt != itemsInRoom->end(); ++itemIt){
-		if((*itemIt)->isVisible())
-			result += (*itemIt)->getItemName() + ", ";
-	}
-	
-	result = result.substr(0, result.length() - 2);
-    
-	return result;*/
 }
 
 //Picks up an item, which means the item is added to the items vector
@@ -358,12 +391,11 @@ string Game::grab(string item){
 	for(itemIt = itemsInRoom->begin(); itemIt != itemsInRoom->end(); ++itemIt){
 		string itemName = (*itemIt)->getItemName();
 		if(itemName == item){
-			if((*itemIt)->getCanGrab()){
+			if((*itemIt)->getCanGrab() && (*itemIt)->isVisible()){
 				
 				vector<Item *>::const_iterator removeIt;
 				for(removeIt = itemsInRoom->begin(); removeIt != itemsInRoom->end(); removeIt++){
 					if((*removeIt)->getHeldItem() != NULL){
-						//cout << (*removeIt)->getHeldItem()->getItemName() << endl;
 						if((*removeIt)->getHeldItem()->getItemName() == item){
 							(*removeIt)->removeHeldItem();
 						}
@@ -378,7 +410,7 @@ string Game::grab(string item){
 				player.addItem(newItem);
 				currentRoom->removeItem((*itemIt));
 
-				result =  "You have picked up " + newItem->getItemName();
+				result =  "You have picked up the " + newItem->getItemName() + ".";
 			} else {
 				result = "Sorry, you can't pick up " + item;
 			}
@@ -441,12 +473,15 @@ string Game::itemAlias(string input){
     for(unsigned int i = 0; i < input.length(); i++){
         output += tolower(input[i]);
     }
-    if(output.substr(0, 3) == "fla") output = "flashlight";
+	
+	if(output.substr(0, 4) == "flam") output = "flamethrower";
+    if(output.substr(0, 4) == "flas") output = "flashlight";
     if(output.substr(0, 3) == "spa") output = "space suit";
 	if(output.substr(0, 3) == "bat") output = "battery pack";
     if(output.substr(0, 3) == "hel") output = "helmet";
     if(output.substr(0, 3) == "cap") output = "captain's keys";
     if(output.substr(0, 3) == "duc") output = "duct tape";
+    if(output.substr(0, 3) == "tap") output = "duct tape";
     if(output.substr(0, 3) == "tub") output = "tube";
     if(output.substr(0, 3) == "nav") output = "navigation system";
     if(output.substr(0, 3) == "dra") output = "drawers";
@@ -483,7 +518,7 @@ string Game::itemAlias(string input){
 	if(output.substr(0, 3) == "esc") output = "escape pod";
 	if(output.substr(0, 3) == "tel") output = "telescope";
 	if(output.substr(0, 3) == "deb") output = "debris field chart";
-
+	if(output.substr(0, 3) == "wir") output = "wire";
 
     return output;
 }
@@ -512,14 +547,14 @@ string Game::roomAlias(string input){
         output += tolower(input[i]);
     }
     if(output.substr(0, 3) == "kit") output = "Kitchen";
-    if(output.substr(0, 3) == "bri") output = "Bridge";
-    if(output.substr(0, 3) == "sle"){
+    else if(output.substr(0, 3) == "bri") output = "Bridge";
+    else if(output.substr(0, 3) == "sle"){
         if(output[output.length() - 1] == '1')
             return "Sleeping Quarters 1";
         else
             return "Sleeping Quarters 2";
     }
-    if(output.substr(0, 3) == "equ") output = "Equipment Room";
+    else if(output.substr(0, 3) == "equ") output = "Equipment Room";
     else if(output.substr(0, 3) == "con") output = "Connection Tube";
 	else if(output.substr(0, 3) == "eng") output = "Engine Room";
 	else if(output.substr(0, 3) == "tra") output = "Training Room";
@@ -652,7 +687,7 @@ string Game::patch(string item1, string item2){
 		for(itemIt3 = player.getCurrentItems()->begin(); itemIt3 != player.getCurrentItems()->end(); itemIt3++){
 			if((*itemIt3)->getItemName() == "helmet") (*itemIt3)->setItemDescription(rep);
 		}
-		return "You have patched your helmet with the duct tape..";
+		return "You have patched your helmet with the duct tape.";
 	} 
 	if(item1 == "space suit" && item2 == "duct tape"){
 		bool hasHelmet = false;
@@ -679,7 +714,6 @@ string Game::patch(string item1, string item2){
 			}
 		} else {
 			string rep = "Your space suit still needs a tube!";
-			player.removeItem((*itemIt2));
 			vector<Item *>::const_iterator itemIt3;
 			for(itemIt3 = player.getCurrentItems()->begin(); itemIt3 != player.getCurrentItems()->end(); itemIt3++){
 				if((*itemIt3)->getItemName() == "space suit") (*itemIt3)->setItemDescription(rep);
@@ -707,10 +741,23 @@ string Game::hit(string item1, string item2){
 				break;
 			}
 		}
-		if(!hasDumbbell) return "That didn't do anything. You need something heavy and sturdy.";
-		(*itemIt2)->makeVisible();
-		//(*itemIt)->setItemDescription("The emergency battery locker is open.");
+		
+		if(!hasDumbbell) return "You need to find a dumbbell before you can use it!";
+	
+		vector<Item *>::const_iterator itemIt3;
+		for(itemIt3 = currentRoom->getCurrentItems()->begin(); itemIt3 != currentRoom->getCurrentItems()->end(); itemIt3++){
+			if((*itemIt3)->getItemName() == "battery pack") 
+				(*itemIt3)->makeVisible();
+		}
+
+		vector<Item *>::const_iterator itemIt4;
+		for(itemIt4 = currentRoom->getCurrentItems()->begin(); itemIt4 != currentRoom->getCurrentItems()->end(); itemIt4++){
+			if((*itemIt4)->getItemName() == "emergency battery locker") 
+				(*itemIt4)->setItemDescription("The emergency battery locker is open.");
+		}
+
 		return "The emergency battery locker is open! Now you can grab a battery pack.";
+
 	} else {
 		return "Well, that's not going to do anything.";
 	}
@@ -978,9 +1025,9 @@ string Game::processPlayerInput(string input){
 			
 			return go(location);
 		} else {
-			return "Sorry, I don't understand.";
+			return "Sorry, I don't understand. You can use \"help\" to see the list of commands available or use \"look\" to look around the room.";
 		}
 	}
-	return "Sorry, I don't understand.";
+	return "Sorry, I don't understand. You can use \"Help\" to see the list of commands available or use \"look\" to look around the room.";
 }
 

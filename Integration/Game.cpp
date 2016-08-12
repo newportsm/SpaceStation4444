@@ -360,7 +360,7 @@ string Game::lookAt(string item){
 	vector<Item *>::const_iterator roomItems;
 	for(roomItems = currentRoom->getCurrentItems()->begin(); roomItems != currentRoom->getCurrentItems()->end(); roomItems++){
 		if((*roomItems)->getItemName() == item){
-			result = (*roomItems)->getItemDescription();
+			result = (*roomItems)->getItemName() + ": " + (*roomItems)->getItemDescription();
 			
 		}
 	}

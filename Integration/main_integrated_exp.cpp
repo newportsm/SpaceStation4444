@@ -43,7 +43,7 @@ void RoomGraphics(string name, char roomGraphic[]) {
 		strcpy(roomGraphic, SpaceShip1);
 }
 
-/*void ItemGraphics(string item, char itemGraphic[]) {
+void ItemGraphics(string item, char itemGraphic[]) {
 	char SpaceShip1[] = "              ______________ \n             <--------------\\ \n             .>-------------<--------------.______________ \n            /____________________                         `----.__ \n          .'         /.----------.__       ======-----====>       `. \n        .'          //              `--._     ______________________`. \n      .'           //                    `.--'  -------------------------. \n ,------------------------------------.==[=====]=========@================== \n|     (========\\____________      [_=__)  `-.________________________.---' \n \\     \\===========_________)   .--| |##)     `--.___           _.-' \n  \\____________________________/---'-`-'             `---------'";
     char Planet[] = "                                                    ___ \n                                                  ,o88888 \n                                               ,o8888888' \n                         ,:o:o:oooo.        ,8O88Pd8888\" \n                     ,.::.::o:ooooOoOoO. ,oO8O8Pd888'\" \n                    ,.:.::o:ooOoOoOO8O8OOo.8OOPd8O8O\" \n                  , ..:.::o:ooOoOOOO8OOOOo.FdO8O8\" \n                 , ..:.::o:ooOoOO8O888O8O,COCOO\" \n                , . ..:.::o:ooOoOOOO8OOOOCOCO\" \n                 . ..:.::o:ooOoOoOO8O8OCCCC\"o \n                    . ..:.::o:ooooOoCoCCC\"o:o \n                    . ..:.::o:o:,cooooCo\"oo:o: \n                 `   . . ..:.:cocoooo\"'o:o:::' \n                 .`   . ..::ccccoc\"'o:o:o:::' \n                :.:.    ,c:cccc\"':.:.:.:.:.' \n              ..:.:\"'`::::c:\"'..:.:.:.:.:.' \n            ...:.'.:.::::\"'    . . . . .' \n           .. . ....:.\"' `   .  . . '' \n         . . . ....\"' \n         .. . .\"'     \n        . ";
     char Satelitte[] = "           / : \\ \n          / o0o \\ \n    _____\"~~~~~~~\"_____ \n    \\+###|U * * U|###+/ \n  \\...!(.&gt;..&lt;)!.../ \n      ^^^^o|   |o^^^^ \n   +=====}:^^^^^:{=====+# \n   .____  .|!!!|.  ____. \n   |#####:/\" \" \"\\:#####| \n   |#####=|  O  |=#####| \n|#####&gt;\\_____/&lt;#####| \n    ^^^^^   | |   ^^^^^ \n            o o";
@@ -62,7 +62,7 @@ void RoomGraphics(string name, char roomGraphic[]) {
     char BackupGen[] = "             .-----.----.-----.  \n            / /-.| |////| |.-\\ \\  \n           / /|_|| |////| ||_|\\ \\   \n          /  :   : |////| :   :  \\\n         /  /___:  |////|  :___\\  \\\n        /   :   |_ |////| _|   :___\\    \n       /   /    |_||////||_|    \\   \\    \n      /    :    |_||////||_|    :    \\\n     /____/____ |_||////||_| ____\\____\\\n    /     :    |   |////|   |    :     \\\n   /     /     | _ |////| _ |     \\     \\\n   \\     :     || ||////|| ||     :     /\n    \\   /    .'-\\ ||////|| /-`.    \\   /";
     char Weapon[] = "              ____,----._\n   ,--'| _|\" o;.  `.____        ____  ,,=====._\n .=|.':| U| ;:;:  .- \\,,`-.===='}.,'\\//       \"`\n(]=|;: |o |  ,.  (  :;)::(     ):;::>}X==========-\n `=| :;|  | ,: o  `-_/``,-`====.}___/\\\\       _,\n   `--.|__|_ .:  _,' \"\"\"              ``=====''\n       ~  ~`----'";
 
-}*/
+}
 
 void strToCstr(string input, char * output){
 	/*for(unsigned int i = 0; i < input.length(); i++){
@@ -105,6 +105,19 @@ string cstrToStr(char * input){
 		output += input[i];
 	}
 	return output;
+}
+
+string getItemName(string input){
+    string str1 = "You have picked up the ";
+    if(input.substr(0, str1.length()) == str1){
+        return input.substr(str1.length(), input.length() - str1.length() - 1);
+    }
+    int position = 0;
+    while(input[position] != ':'){
+        position++;
+    }
+    return input.substr(0, position);
+    return "No match.";
 }
 
 int main(){
@@ -239,8 +252,11 @@ int main(){
 		//Initialize graphic display array and make it empty
 		char roomGraphic[3000];
 		memset(roomGraphic, '\0', 3000);
-		
-		RoomGraphics(res.roomName, roomGraphic);
+	    
+        if(res.activeEvent)    
+            RoomGraphics(res.eventName, roomGraphic);
+        else 
+		    RoomGraphics(res.roomName, roomGraphic);
 	
 		//If we have moved to a new room or there is an active event, display it.
 		//Otherwise, skip to getting input from user.	
@@ -302,6 +318,11 @@ int main(){
 		} else {
 			result = game.processPlayerInput(input);
 		}
+
+        string itemName = getItemName(result);
+        if(itemName != "No match."){
+
+        }
 
 		// refresh each window
         refresh();

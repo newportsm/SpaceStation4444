@@ -367,6 +367,9 @@ int main(){
         wrefresh(bottom);
 	}
 
+    cout << "\n\n\nPress any key to quit.\n";
+    getchar();
+
 	endwin();
 	
 	return 0;

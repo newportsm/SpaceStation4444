@@ -850,7 +850,8 @@ string Game::processPlayerInput(string input){
 	}
 	else if(currentCommand[0] == "eat"){
 		if(currentCommand.size() > 0){
-			if(currentCommand[1] != "bacon"){
+            string food = itemAlias(currentCommand[1]);
+			if(food != "bacon"){
 				return "You cant' eat that!";
 			} else {
 				playerHasDied();

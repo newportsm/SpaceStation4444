@@ -121,6 +121,7 @@ string getItemName(string input){
 }
 
 int main(){
+
     int parent_x, parent_y;
     int middle_size = 22;
     int bottom_size = 3;
@@ -131,9 +132,20 @@ int main(){
     
     initscr();
     //noecho();
-    curs_set(TRUE);
-    keypad(stdscr, TRUE);
 
+	int row, col;
+	getmaxyx(stdscr,row,col);
+	if(row < 60 || col < 115){
+		cout << "Your terminal windows must have at least 115 columns and 60 rows." << endl;
+		cout << "Your current terminal size is: " << row << " rows and " << col << " columns." << endl;
+		cout << "Please resize and restrart the game." << endl;
+		endwin();
+		return 1;
+	}
+
+	curs_set(TRUE);
+    keypad(stdscr, TRUE);
+	
     // get our maximum window dimensions
     //getmaxyx(stdscr, parent_y, parent_x);
     
@@ -355,5 +367,7 @@ int main(){
         wrefresh(bottom);
 	}
 
+	endwin();
+	
 	return 0;
 }

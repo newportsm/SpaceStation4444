@@ -136,7 +136,8 @@ int main(){
 	int row, col;
 	getmaxyx(stdscr,row,col);
 	if(row < 60 || col < 115){
-		cout << "Your terminal windows must have at least 115 columns and 60 rows.\nYour current terminal size is: " + row + " rows and " + col + " columns.\nPlease resize and restrart the game.\n";
+		string errorMsg = "Your terminal windows must have at least 115 columns and 60 rows.\nYour current terminal size is: " + row + " rows and " + col + " columns.\nPlease resize and restrart the game.\n";
+		cout << errorMsg;
 		endwin();
 		return 1;
 	}

@@ -219,7 +219,7 @@ int main(){
 		char roomGraphic[3000];
 		memset(roomGraphic, '\0', 3000);
 		
-		RoomGraphics(res.roomName, roomGraphic);
+		RoomGraphics(res.roomName, &roomGraphic);
 	
 		//If we have moved to a new room or there is an active event, display it.
 		//Otherwise, skip to getting input from user.	

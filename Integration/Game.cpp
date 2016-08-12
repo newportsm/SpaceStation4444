@@ -144,7 +144,7 @@ vector<string> Game::respondToEvent(string input){
 						results.push_back( "nothing" );
 					} else {
 						match = true;
-						results.push_back( "\"Hey, punk, do you feel lucky?!\" you shout at the alien as you pull the trigger on the flamethrower. Screeching, the giant creature scampers away.");
+						results.push_back( "\"Hey, punk, do you feel lucky?!\" you shout at the alien as you pull the trigger on the flamethrower. Screeching, the giant creature scampers away. Sadly, that used up the flamethrower cartridge.");
 						results.push_back("continue");
 						currentRoom->getFirstActiveEvent()->changeStatus();
 					}
@@ -537,6 +537,7 @@ string Game::eventAlias(string input){
     if(output.substr(0, 3) == "jum") output = "jump for tube door";
     if(output.substr(0, 3) == "bui") output = "build ladder";
     if(output.substr(0, 3) == "low") output = "lower ladder";
+    if(output.substr(0, 3) == "burn") output = "burn it";
 
 	return output;
 }

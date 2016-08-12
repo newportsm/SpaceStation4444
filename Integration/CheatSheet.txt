@@ -1,0 +1,116 @@
+Cheat Sheet to Beat Space Station 4444
+
+This cheat sheet represents the fewest commaneds one would need to use to complete the game. It ignores any items/features that you can look at but aren't necessary.
+
+You start on the Bridge, so first:
+open draw
+grab flash
+
+Go to locker room and get duct tape:
+cou
+open ser
+grab duc
+
+Go to Sleeping Quarters 1 and get helmet:
+cou
+open per
+grab hel
+
+Go to Sleeping Quarters 2 and grab captain's keys:
+cou
+open woo
+grab cap
+
+Now go to kitchen, which we get to by going clockwise:
+clo
+clo
+clo
+clo
+
+In kitchen, we are attacked by an alien, so:
+flash
+
+And then:
+open cab
+grab tub
+
+Go to equpiment room and get space suit:
+clo
+open sui
+grab spa
+
+Let's repair the helmet and space suit:
+patch hel with duc
+patch spa with duc
+insert tub into spa
+
+Now, entrance to connection room:
+clo
+
+Let's lower the ladder:
+low
+
+Go through the Connection tube:
+clo
+got
+
+From here, we can go either clockwise or counter clockwise. I prefer clockwise.
+clo
+
+Now, you're in the computer room. Need to go to the Observatory, so:
+cou
+grab wir
+
+Back to computer room and then onto weapons room:
+clo
+clo
+
+In Weapons room:
+open wea
+grab flam
+
+Go to Storage Room and then Escape Pods:
+clo
+clo
+
+In escape pods, you want to burn the alien so:
+burn it **************
+
+Still need navigation system, so go to science lab and then training room:
+clo
+clo
+
+Another aline attack in traning room, but light doesn't work. Just punch it.
+pun
+
+We need the dumbbell to break a lock, so:
+open fre
+grab dum
+
+Now, go to Engine Room
+clo
+hit eme with dum
+grab bat
+
+Now, go back to computer room:
+cou
+cou
+cou
+cou
+cou
+cou
+
+Insert the batter into the slot for the battery and grab navigation system:
+insert bat into slo
+grab nav
+
+Now, go to the escape pods.
+clo
+clo
+clo
+
+Install the navigation system:
+install nav into esc
+
+Finally, you need to fly the escape pod:
+fly esc

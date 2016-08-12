@@ -537,7 +537,7 @@ string Game::eventAlias(string input){
     if(output.substr(0, 3) == "jum") output = "jump for tube door";
     if(output.substr(0, 3) == "bui") output = "build ladder";
     if(output.substr(0, 3) == "low") output = "lower ladder";
-    if(output.substr(0, 3) == "burn") output = "burn it";
+    if(output.substr(0, 3) == "bur") output = "burn it";
 
 	return output;
 }

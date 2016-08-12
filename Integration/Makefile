@@ -14,8 +14,12 @@ testGame: Event.o Item.o factories.o Room.o Game.o main_integrated.cpp
 	g++ -Wall -std=c++1y Event.o Item.o Game.o factories.o Room.o main_integrated.cpp -o testGame -lncurses
 testGameExp: Event.o Item.o factories.o Room.o Game.o main_integrated_exp.cpp
 	g++ -Wall -std=c++1y Event.o Item.o Game.o factories.o Room.o main_integrated_exp.cpp -o testGame -lncurses
+SpaceStation4444: Event.o Item.o factories.o Room.o Game.o main_integrated_exp.cpp
+	g++ -Wall -std=c++1y Event.o Item.o Game.o factories.o Room.o main_integrated_exp.cpp -o SpaceStation4444 -lncurses
 
+clean:
+	rm *.o *.gch SpaceStation4444
 cleandepend:
 	rm *.o *.gch
 cleanall:
-	rm *.o testGame *.gch
+	rm *.o testGame *.gch SpaceStation4444

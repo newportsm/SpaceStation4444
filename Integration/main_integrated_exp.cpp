@@ -94,10 +94,8 @@ bool isLook(char * input){
 }
 
 void strToCstr(string input, char * output){
-	/*for(unsigned int i = 0; i < input.length(); i++){
-		output[i] = input[i];
-	}*/
-	int totalLength = input.length();
+
+    int totalLength = input.length();
 	int inPos = 0;
 	int outPos = 0;
 	int wordCount = 0;
@@ -141,11 +139,12 @@ string getItemName(string input){
     if(input.substr(0, str1.length()) == str1){
         return input.substr(str1.length(), input.length() - str1.length() - 1);
     }
-    int position = 0;
-    while(input[position] != ':'){
+    unsigned int position = 0;
+    while(position < input.length() - 2){
         position++;
+        if(input[position] == ':')
+            return input.substr(0, position);
     }
-    return input.substr(0, position);
     return "No match.";
 }
 
@@ -219,7 +218,7 @@ int main(){
    	//String and c-string used to get input!	
 	string curRoom = "";
 	char RoomInfo[3000];
-	char cInput[1000];
+	char cInput[3000];
 	string input = "";
 
 	do{
@@ -327,7 +326,7 @@ int main(){
 		}
 
 		//Make sure our input c-string is nice and empty, please!
-		memset(cInput, '\0', 1000);
+		memset(cInput, '\0', 3000);
 
 		//Put our cursor in the text entry box.
 		move(48,2);

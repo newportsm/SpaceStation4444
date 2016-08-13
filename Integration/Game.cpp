@@ -343,7 +343,7 @@ string Game::fly(string item){
 	for(roomItems = currentRoom->getCurrentItems()->begin(); roomItems != currentRoom->getCurrentItems()->end(); roomItems++){
 		if((*roomItems)->getItemName() == item){
 			if(item == "escape pod"){
-				result = "You have successfully escaped! Congratulations!";
+				result = "You have successfully escaped! Breathing a sigh of relief, you watch the space station rise as you plummet towards the planet below. Thinking this calls for a nice stiff drink, you reach for the emergency celebration kit, but your hand lands on something with an odd text. Sort of hard, like an alien's shell... Turning around, you finally notice the smell of rotting bacon and come face to face with the alien you'd previously fried with a flamethrowers. 'Hi,' you whisper...\n\nThe end?";
 				playerHasDied();
 			}
 		}
@@ -992,22 +992,9 @@ string Game::processPlayerInput(string input){
 		}
 	}
 	else if(currentCommand[0] == "help") {
-		string instructions = "Use 'go [room name]' to move to another room.\n"; 
-		instructions += "Use 'look' to get full room description.\n";
-		instructions += "Use 'look at [item name]' to get description of something in a room.\n"; 
-		instructions += "Use 'check' to get a list of all the items you have picked up.\n"; 
-		instructions += "Use 'check [item name]' to get a description of an item you have picked up.\n";	
-		instructions += "Use 'open [item name]' top open something and see what's inside.\n";
-		instructions += "Use 'grab [item name]' to pick up an item.\n";
-		instructions += "Use 'patch [item name] with [item name]' to patch and item.\n";
-		instructions += "Use 'insert [item name] into [item name]' to insert one item into another.\n";
-		instructions += "Use 'install [item name] into [item name]' to install one item in another.\n";
-		instructions += "Use 'fly [item name]' to fly something, like an airplane.\n";
-		instructions += "Use 'hit [item name] with [item name]' to hit one item with another.\n";
-		instructions += "Use 'quit' to exit. (Will not work when responding to an event.\n";
-		instructions += "Use 'help' at any point during the game to see these instructions again.\n"; 
+		string instructions = "HELP MENU - COMMANDS\nUse 'go [room name]', 'go [clockwise/counter-clockwise]',\nor just '[room name]'/'[counter-clockwise/clockwise]' to move to another room.\nUse 'look' to get full room description.\nUse 'look at [item name]' to get description of something in a room.\nUse 'check' to get a list of all the items you have picked up.\nUse 'check [item name]' to get a description of an item you have picked up.\nUse 'open [item name]' top open something and see what's inside.\nUse 'grab [item name]' to pick up an item.\nUse 'patch [item name] with [item name]' to patch and item.\nUse 'insert [item name] into [item name]' to insert one item into another.\nUse 'install [item name] into [item name]' to install one item in another.\nUse 'fly [item name]' to fly something, like an airplane.\nUse 'hit [item name] with [item name]' to hit one item with another.\nUse 'quit' to exit. (Will not work when responding to an event.\nUse 'help' at any point during the game to see these instructions again.";
 		return instructions;
-	}
+    }
 	else if(currentCommand[0] == "quit"){
         playerHasDied();
 		return "Good-bye!"; 

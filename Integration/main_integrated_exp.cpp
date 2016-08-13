@@ -330,7 +330,7 @@ int main(){
 		memset(cInput, '\0', 1000);
 
 		//Put our cursor in the text entry box.
-		move(48,1);
+		move(48,2);
 		refresh();
 
 		//Get input from the user!

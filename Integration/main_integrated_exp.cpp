@@ -189,7 +189,7 @@ int main(){
 		endwin();
 		cout << "Your terminal windows must have at least 115 columns and 60 rows.\n";
 		cout << "Your current terminal size is: " << row << " rows and " << col << " columns.\n";
-		cout << "Please resize and restrart the game.\n";
+		cout << "Please resize and restrart the game. If resizing isn't enough, try making your font smaller.\n";
 		return 1;
 	}
 

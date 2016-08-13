@@ -249,10 +249,10 @@ string cstrToStr(char * input){
 string getItemName(string input){
     string str1 = "You have picked up the ";
     if(input.substr(0, str1.length()) == str1){
-        return input.substr(str1.length(), input.length() - str1.length() - 1);
+        string ret = input.substr(str1.length(), input.length() - str1.length() - 1);
     }
     unsigned int position = 0;
-    while(position < input.length() - 2){
+    while(position < 30){
         position++;
         if(input[position] == ':')
             return input.substr(0, position);
@@ -447,10 +447,12 @@ int main(){
 		//Get input from the user!
 		getstr(cInput);
 
+        bool looking = false;
+
 		if(strlen(cInput) < 2 || isLook(cInput)){
 			strcpy(cInput, "look");
             memset(roomGraphic, '\0', 3000);
-            
+            looking = true;
             if(res.activeEvent)    
                 RoomGraphics(res.eventName, roomGraphic);
             else 
@@ -488,13 +490,20 @@ int main(){
 		memset(itemGraphic, '\0', 3000);
 		
 		string itemName = getItemName(result);
-        if(itemName != "No match."){
+        if(looking){
+            mvwprintw(top, 3, 15, roomGraphic);
+			mvwprintw(middle, 1, 1, RoomInfo);
+			mvwprintw(bottom, 1, 1, "");
+
+        }
+        else if(itemName != "No match."){
 			// draw to our windows
-			mvwprintw(top, 3, 15, roomGraphic);
+			ItemGraphics(itemName, itemGraphic);
+            mvwprintw(top, 3, 15, itemGraphic);
 			mvwprintw(middle, 1, 1, RoomInfo);
 			mvwprintw(bottom, 1, 1, "");
         } else {
-			ItemGraphics(itemName, itemGraphic);
+			//ItemGraphics(itemName, itemGraphic);
 			mvwprintw(top, 3, 15, itemGraphic);
 			mvwprintw(middle, 1, 1, RoomInfo);
 			mvwprintw(bottom, 1, 1, "");

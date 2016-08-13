@@ -81,6 +81,17 @@ void RoomGraphics(string name, char roomGraphic[]) {
 
 }*/
 
+bool isLook(char * input){
+    char look[] = "look  ";
+    int len = strlen(input);
+    if(len <= 6){
+        for(int i = 0; i < len; i++){
+            if(input[i] != look[i]) return false;
+        }
+    }
+    else return false;
+    return true;
+}
 
 void strToCstr(string input, char * output){
 	/*for(unsigned int i = 0; i < input.length(); i++){
@@ -325,7 +336,7 @@ int main(){
 		//Get input from the user!
 		getstr(cInput);
 
-		if(strlen(cInput) < 2){
+		if(strlen(cInput) < 2 || isLook(cInput)){
 			strcpy(cInput, "look");
             memset(roomGraphic, '\0', 3000);
             
@@ -333,7 +344,6 @@ int main(){
                 RoomGraphics(res.eventName, roomGraphic);
             else 
                 RoomGraphics(res.roomName, roomGraphic);
-	
 		}
 
 		//Convert cInput to string

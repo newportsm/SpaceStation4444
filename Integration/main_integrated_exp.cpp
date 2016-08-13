@@ -155,7 +155,7 @@ int main(){
     int middle_size = 22;
     int bottom_size = 3;
     char TitleScreen[] ="   _____                         _____ _        _   _ \n                 / ____|                       / ____| |      | | (_)         \n                | (___  _ __   __ _  ___ ___  | (___ | |_ __ _| |_ _  ___  _ __ \n                 \\___ \\| '_ \\ / _` |/ __/ _ \\  \\___ \\| __/ _` | __| |/ _ \\| '_ \\ \n                 ____) | |_) | (_| | (_|  __/  ____) | || (_| | |_| | (_) | | | |\n                |_____/| .__/ \\__,_|\\___\\___| |_____/ \\__\\__,_|\\__|_|\\___/|_| |_| \n                       | |       _  _   _  _   _  _   _  _ \n                       |_|      | || | | || | | || | | || |\n                                | || |_| || |_| || |_| || |_ \n                                |__   _|__   _|__   _|__   _|\n                                   | |    | |    | |    | |\n                                   |_|    |_|    |_|    |_|";
-    char HelpMenu[] = "HELP MENU - COMMANDS\nUse 'go [room name]' to move to another room.\nUse 'look' to get full room description.\nUse 'look at [item name]' to get description of something in a room.\nUse 'check' to get a list of all the items you have picked up.\nUse 'check [item name]' to get a description of an item you have picked up.\nUse 'open [item name]' top open something and see what's inside.\nUse 'grab [item name]' to pick up an item.\nUse 'patch [item name] with [item name]' to patch and item.\nUse 'insert [item name] into [item name]' to insert one item into another.\nUse 'install [item name] into [item name]' to install one item in another.\nUse 'fly [item name]' to fly something, like an airplane.\nUse 'hit [item name] with [item name]' to hit one item with another.\nUse 'quit' to exit. (Will not work when responding to an event.\nUse 'help' at any point during the game to see these instructions again.\nType 'START' and hit enter to begin the game.";
+    char HelpMenu[] = "HELP MENU - COMMANDS\nUse 'go [room name]', 'go [clockwise/counter-clockwise]',\nor just '[room name]'/'[counter-clockwise/clockwise]' to move to another room.\nUse 'look' to get full room description.\nUse 'look at [item name]' to get description of something in a room.\nUse 'check' to get a list of all the items you have picked up.\nUse 'check [item name]' to get a description of an item you have picked up.\nUse 'open [item name]' top open something and see what's inside.\nUse 'grab [item name]' to pick up an item.\nUse 'patch [item name] with [item name]' to patch and item.\nUse 'insert [item name] into [item name]' to insert one item into another.\nUse 'install [item name] into [item name]' to install one item in another.\nUse 'fly [item name]' to fly something, like an airplane.\nUse 'hit [item name] with [item name]' to hit one item with another.\nUse 'quit' to exit. (Will not work when responding to an event.\nUse 'help' at any point during the game to see these instructions again.\nType 'START' and hit enter to begin the game.";
 	char Introduction[] = "Space Station 4444 is the last line of defense for the Planet Hobbly Knees, a planet rich in\nuntamed resources and a warning to chartographers everywhere not to let their kids get involved \nin the naming process. You've been serving on this station for the better part of a year -- not\nquite a newbie yet not quite a regular. Nevertheless, you've bonded well with the other crew and \nthe captain has proven to be strict by understanding.\n\nIt's the afternoon watch, and you're alone on the bridge -- the rest of the crew are either in \nthe training room or in the science lab. You're relaxing in the captain's chair on the bridge,\nspinning a pen in your hand daydreaming about sipping exotic cocktails on a beach when the proximity\nsensors begin blaring. Before you even have time to sit up, the wall above you explodes and the furious\nscreech of air being sucked into space deafens you.\n\nEverything goes black... \nPress a key to continue...";
     Game game;
     
@@ -186,7 +186,7 @@ int main(){
     WINDOW* topborder = newwin(parent_y - middle_size, parent_x, 0, 0);
     WINDOW* top = newwin(parent_y - middle_size - 2, parent_x - 2, 1, 1);
     WINDOW* middleborder = newwin(middle_size - bottom_size, parent_x, parent_y - middle_size, 0);
-    WINDOW* middle = newwin(middle_size - bottom_size - 2, parent_x - 2, parent_y - middle_size + 1, 1);
+    WINDOW* middle = newwin(middle_size - bottom_size - 2, parent_x - 3, parent_y - middle_size + 1, 2);
     WINDOW* bottomborder = newwin(bottom_size, parent_x, parent_y - bottom_size, 0);
     WINDOW* bottom = newwin(bottom_size - 2, parent_x - 2, parent_y - bottom_size + 1, 1);
 
@@ -230,7 +230,7 @@ int main(){
 		mvwaddstr(bottom, 1, 1, " ");
 		box(bottomborder, 0, 0);
 		wrefresh(bottom);
-		move(48, 1);
+		move(48, 2);
 		refresh();
 
 		getstr(cInput);
